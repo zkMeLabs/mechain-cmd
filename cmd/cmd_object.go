@@ -12,16 +12,14 @@ import (
 	"sync"
 	"time"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
 	"github.com/urfave/cli/v2"
 
 	"github.com/bnb-chain/greenfield-go-sdk/client"
 	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
-	"github.com/bnb-chain/greenfield/sdk/types"
-	gtypes "github.com/bnb-chain/greenfield/types"
-	storageTypes "github.com/bnb-chain/greenfield/x/storage/types"
+	gtypes "github.com/evmos/evmos/v12/types"
+	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
 )
 
 // cmdPutObj return the command to finish uploading payload of the object
@@ -220,50 +218,50 @@ $ gnfd-cmd object get-progress gnfd://gnfd-bucket/gnfd-object`,
 	}
 }
 
-func cmdMirrorObject() *cli.Command {
-	return &cli.Command{
-		Name:      "mirror",
-		Action:    mirrorObject,
-		Usage:     "mirror object to BSC",
-		ArgsUsage: "",
-		Description: `
-Mirror a object as NFT to BSC
+// func cmdMirrorObject() *cli.Command {
+// 	return &cli.Command{
+// 		Name:      "mirror",
+// 		Action:    mirrorObject,
+// 		Usage:     "mirror object to BSC",
+// 		ArgsUsage: "",
+// 		Description: `
+// Mirror a object as NFT to BSC
 
-Examples:
-# Mirror a object using object id
-$ gnfd-cmd object mirror --destChainId 97 --id 1
+// Examples:
+// # Mirror a object using object id
+// $ gnfd-cmd object mirror --destChainId 97 --id 1
 
-# Mirror a object using bucket and object name
-$ gnfd-cmd object mirror --destChainId 97 --bucketName yourBucketName --objectName yourObjectName
-`,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:     DestChainIdFlag,
-				Value:    "",
-				Usage:    "target chain id",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     IdFlag,
-				Value:    "",
-				Usage:    "object id",
-				Required: false,
-			},
-			&cli.StringFlag{
-				Name:     bucketNameFlag,
-				Value:    "",
-				Usage:    "bucket name",
-				Required: false,
-			},
-			&cli.StringFlag{
-				Name:     objectNameFlag,
-				Value:    "",
-				Usage:    "object name",
-				Required: false,
-			},
-		},
-	}
-}
+// # Mirror a object using bucket and object name
+// $ gnfd-cmd object mirror --destChainId 97 --bucketName yourBucketName --objectName yourObjectName
+// `,
+// 		Flags: []cli.Flag{
+// 			&cli.StringFlag{
+// 				Name:     DestChainIdFlag,
+// 				Value:    "",
+// 				Usage:    "target chain id",
+// 				Required: true,
+// 			},
+// 			&cli.StringFlag{
+// 				Name:     IdFlag,
+// 				Value:    "",
+// 				Usage:    "object id",
+// 				Required: false,
+// 			},
+// 			&cli.StringFlag{
+// 				Name:     bucketNameFlag,
+// 				Value:    "",
+// 				Usage:    "bucket name",
+// 				Required: false,
+// 			},
+// 			&cli.StringFlag{
+// 				Name:     objectNameFlag,
+// 				Value:    "",
+// 				Usage:    "object name",
+// 				Required: false,
+// 			},
+// 		},
+// 	}
+// }
 
 func cmdSetTagForObject() *cli.Command {
 	return &cli.Command{
@@ -1258,25 +1256,25 @@ func getObjAndBucketNames(urlInfo string) (string, string, error) {
 	return bucketName, objectName, nil
 }
 
-func mirrorObject(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
-	if err != nil {
-		return toCmdErr(err)
-	}
-	id := math.NewUint(0)
-	if ctx.String(IdFlag) != "" {
-		id = math.NewUintFromString(ctx.String(IdFlag))
-	}
-	destChainId := ctx.Int64(DestChainIdFlag)
-	bucketName := ctx.String(bucketNameFlag)
-	objectName := ctx.String(objectNameFlag)
-	c, cancelContext := context.WithCancel(globalContext)
-	defer cancelContext()
+// func mirrorObject(ctx *cli.Context) error {
+// 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
+// 	id := math.NewUint(0)
+// 	if ctx.String(IdFlag) != "" {
+// 		id = math.NewUintFromString(ctx.String(IdFlag))
+// 	}
+// 	destChainId := ctx.Int64(DestChainIdFlag)
+// 	bucketName := ctx.String(bucketNameFlag)
+// 	objectName := ctx.String(objectNameFlag)
+// 	c, cancelContext := context.WithCancel(globalContext)
+// 	defer cancelContext()
 
-	txResp, err := client.MirrorObject(c, sdk.ChainID(destChainId), id, bucketName, objectName, types.TxOption{})
-	if err != nil {
-		return toCmdErr(err)
-	}
-	fmt.Printf("mirror object succ, txHash: %s\n", txResp.TxHash)
-	return nil
-}
+// 	txResp, err := client.MirrorObject(c, sdk.ChainID(destChainId), id, bucketName, objectName, types.TxOption{})
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
+// 	fmt.Printf("mirror object succ, txHash: %s\n", txResp.TxHash)
+// 	return nil
+// }

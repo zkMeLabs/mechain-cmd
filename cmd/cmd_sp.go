@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/bnb-chain/greenfield-go-sdk/client"
-	sptypes "github.com/bnb-chain/greenfield/x/sp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sptypes "github.com/evmos/evmos/v12/x/sp/types"
 	"github.com/urfave/cli/v2"
 )
 

@@ -12,8 +12,8 @@ import (
 
 	"cosmossdk.io/math"
 	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
-	"github.com/bnb-chain/greenfield/sdk/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/evmos/evmos/v12/sdk/types"
 	"github.com/urfave/cli/v2"
 )
 
@@ -176,34 +176,34 @@ $ gnfd-cmd bank transfer --toAddress 0x.. --amount 12345`,
 }
 
 // cmdBridge makes a transfer from Greenfield to BSC
-func cmdBridge() *cli.Command {
-	return &cli.Command{
-		Name:      "bridge",
-		Action:    Bridge,
-		Usage:     "transfer from greenfield to a BSC account",
-		ArgsUsage: "",
-		Description: `
-Create a cross chain transfer from Greenfield to a BSC account
+// func cmdBridge() *cli.Command {
+// 	return &cli.Command{
+// 		Name:      "bridge",
+// 		Action:    Bridge,
+// 		Usage:     "transfer from greenfield to a BSC account",
+// 		ArgsUsage: "",
+// 		Description: `
+// Create a cross chain transfer from Greenfield to a BSC account
 
-Examples:
-# Make a cross chain transfer to BSC
-$ gnfd-cmd bank bridge --toAddress 0x.. --amount 12345`,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:     toAddressFlag,
-				Value:    "",
-				Usage:    "the receiver address in BSC",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     amountFlag,
-				Value:    "",
-				Usage:    "the amount of BNB to be sent",
-				Required: true,
-			},
-		},
-	}
-}
+// Examples:
+// # Make a cross chain transfer to BSC
+// $ gnfd-cmd bank bridge --toAddress 0x.. --amount 12345`,
+// 		Flags: []cli.Flag{
+// 			&cli.StringFlag{
+// 				Name:     toAddressFlag,
+// 				Value:    "",
+// 				Usage:    "the receiver address in BSC",
+// 				Required: true,
+// 			},
+// 			&cli.StringFlag{
+// 				Name:     amountFlag,
+// 				Value:    "",
+// 				Usage:    "the amount of BNB to be sent",
+// 				Required: true,
+// 			},
+// 		},
+// 	}
+// }
 
 func importKey(ctx *cli.Context) error {
 	var (
@@ -431,38 +431,38 @@ func createAccount(ctx *cli.Context) error {
 	return nil
 }
 
-func Bridge(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
-	if err != nil {
-		return toCmdErr(err)
-	}
+// func Bridge(ctx *cli.Context) error {
+// 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
 
-	c, transfer := context.WithCancel(globalContext)
-	defer transfer()
+// 	c, transfer := context.WithCancel(globalContext)
+// 	defer transfer()
 
-	toAddr := ctx.String(toAddressFlag)
-	_, err = sdk.AccAddressFromHexUnsafe(toAddr)
-	if err != nil {
-		return toCmdErr(err)
-	}
-	amountStr := ctx.String(amountFlag)
-	amount, ok := math.NewIntFromString(amountStr)
-	if !ok {
-		return toCmdErr(fmt.Errorf("%s is not valid amount", amount))
-	}
-	txResp, err := client.TransferOut(c, toAddr, amount, types.TxOption{})
-	if err != nil {
-		return toCmdErr(err)
-	}
+// 	toAddr := ctx.String(toAddressFlag)
+// 	_, err = sdk.AccAddressFromHexUnsafe(toAddr)
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
+// 	amountStr := ctx.String(amountFlag)
+// 	amount, ok := math.NewIntFromString(amountStr)
+// 	if !ok {
+// 		return toCmdErr(fmt.Errorf("%s is not valid amount", amount))
+// 	}
+// 	txResp, err := client.TransferOut(c, toAddr, amount, types.TxOption{})
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
 
-	err = waitTxnStatus(client, c, txResp.TxHash, "Bridge")
-	if err != nil {
-		return toCmdErr(err)
-	}
+// 	err = waitTxnStatus(client, c, txResp.TxHash, "Bridge")
+// 	if err != nil {
+// 		return toCmdErr(err)
+// 	}
 
-	fmt.Printf("transfer out %s BNB to %s succ, txHash: %s\n", amountStr, toAddr, txResp.TxHash)
-	return nil
-}
+// 	fmt.Printf("transfer out %s BNB to %s succ, txHash: %s\n", amountStr, toAddr, txResp.TxHash)
+// 	return nil
+// }
 
 func Transfer(ctx *cli.Context) error {
 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
