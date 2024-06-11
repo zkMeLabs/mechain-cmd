@@ -26,12 +26,12 @@ func cmdImportAccount() *cli.Command {
 		ArgsUsage: " <privateKeyFile>",
 		Description: `
 Import account info from private key file and generate a keystore file to manage user's private key information.
-If no keyfile is specified by --keystore or -k flag, a keystore will be generated at the default path （homedir/.gnfd-cmd/keystore/key.json）
+If no keyfile is specified by --keystore or -k flag, a keystore will be generated at the default path （homedir/.mechain-cmd/keystore/key.json）
 Users need to set the private key file path which contain the origin private hex string .
 
 Examples:
 // key.txt contains the origin private hex string 
-$ gnfd-cmd  account import  key.txt `,
+$ mechain-cmd  account import  key.txt `,
 	}
 }
 
@@ -45,7 +45,7 @@ func cmdListAccount() *cli.Command {
 list the account info, if the user needs to print the privateKey info, set privateKey flag as true
 
 Examples:
-$ gnfd-cmd account ls `,
+$ mechain-cmd account ls `,
 	}
 }
 
@@ -59,7 +59,7 @@ func cmdCreateAccount() *cli.Command {
 create a new account and store the private key in a keystore file
 
 Examples:
-$ gnfd-cmd account new  `,
+$ mechain-cmd account new  `,
 	}
 }
 
@@ -76,7 +76,7 @@ private key material is exported in an INSECURE fashion that is designed to
 allow users to import their keys in hot wallets. 
 
 Examples:
-$ gnfd-cmd account export --unarmoredHex --unsafe`,
+$ mechain-cmd account export --unarmoredHex --unsafe`,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  unsafeFlag,
@@ -100,7 +100,7 @@ func cmdGetAccountBalance() *cli.Command {
 Get the account balance, if address not specified, default to cur user's account
 
 Examples:
-$ gnfd-cmd bank balance --address 0x... `,
+$ mechain-cmd bank balance --address 0x... `,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  addressFlag,
@@ -121,7 +121,7 @@ func cmdSetDefaultAccount() *cli.Command {
 Set the default account value. When running other commands, the keystore corresponding to this account will be used by default.
 
 Examples:
-$ gnfd-cmd account default  0x75345BC9FfFAe09486dE7EC954bAfAEcE29b9b24`,
+$ mechain-cmd account default  0x75345BC9FfFAe09486dE7EC954bAfAEcE29b9b24`,
 	}
 }
 
@@ -158,7 +158,7 @@ Make a transfer from your account to a dest account
 
 Examples:
 # Create a transfer
-$ gnfd-cmd bank transfer --toAddress 0x.. --amount 12345`,
+$ mechain-cmd bank transfer --toAddress 0x.. --amount 12345`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     toAddressFlag,
@@ -187,7 +187,7 @@ $ gnfd-cmd bank transfer --toAddress 0x.. --amount 12345`,
 
 // Examples:
 // # Make a cross chain transfer to BSC
-// $ gnfd-cmd bank bridge --toAddress 0x.. --amount 12345`,
+// $ mechain-cmd bank bridge --toAddress 0x.. --amount 12345`,
 // 		Flags: []cli.Flag{
 // 			&cli.StringFlag{
 // 				Name:     toAddressFlag,
@@ -261,12 +261,12 @@ func importKey(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	if err = os.MkdirAll(filepath.Dir(keyFilePath), 0700); err != nil {
+	if err = os.MkdirAll(filepath.Dir(keyFilePath), 0o700); err != nil {
 		return toCmdErr(errors.New("failed to create directory %s" + filepath.Dir(keyFilePath)))
 	}
 
 	// store the keystore file
-	if err = os.WriteFile(keyFilePath, encryptContent, 0600); err != nil {
+	if err = os.WriteFile(keyFilePath, encryptContent, 0o600); err != nil {
 		return toCmdErr(fmt.Errorf("failed to write keyfile to the path%s: %v", keyFilePath, err))
 	}
 
@@ -416,11 +416,11 @@ func createAccount(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	if err = os.MkdirAll(filepath.Dir(keyFilePath), 0700); err != nil {
+	if err = os.MkdirAll(filepath.Dir(keyFilePath), 0o700); err != nil {
 		return toCmdErr(errors.New("failed to create directory %s" + filepath.Dir(keyFilePath)))
 	}
 	// store the keystore file
-	if err = os.WriteFile(keyFilePath, encryptContent, 0600); err != nil {
+	if err = os.WriteFile(keyFilePath, encryptContent, 0o600); err != nil {
 		return toCmdErr(fmt.Errorf("failed to write keyfile to the path%s: %v", keyFilePath, err))
 	}
 
@@ -516,14 +516,14 @@ func setDefaultAccount(ctx *cli.Context) error {
 	dirPath := filepath.Dir(defaultAccountPath)
 	_, err = os.Stat(dirPath)
 	if os.IsNotExist(err) {
-		err = os.MkdirAll(dirPath, 0755)
+		err = os.MkdirAll(dirPath, 0o755)
 		if err != nil {
 			return toCmdErr(errors.New("failed to set the default account:" + err.Error()))
 		}
 	}
 
 	// write the default account info
-	err = os.WriteFile(defaultAccountPath, []byte(convertAddressToLower(defaultAddress)), 0644)
+	err = os.WriteFile(defaultAccountPath, []byte(convertAddressToLower(defaultAddress)), 0o644)
 	if err != nil {
 		return toCmdErr(errors.New("failed to set the default account:" + err.Error()))
 	}
@@ -556,11 +556,11 @@ func checkAndWriteDefaultKey(homeDir string, content string) {
 	filePath := filepath.Join(homeDir, DefaultAccountPath)
 	_, err = os.Stat(filePath)
 	if os.IsNotExist(err) {
-		if err = os.MkdirAll(filepath.Dir(filePath), 0700); err != nil {
+		if err = os.MkdirAll(filepath.Dir(filePath), 0o700); err != nil {
 			fmt.Printf("failed to create directory %s, error: %v\n", filepath.Dir(filePath), err)
 		}
 
-		err = os.WriteFile(filePath, []byte(content), 0644)
+		err = os.WriteFile(filePath, []byte(content), 0o644)
 		if err != nil {
 			fmt.Printf("failed to write default keystore info %v \n", err)
 			return
@@ -574,7 +574,7 @@ func checkAndWriteDefaultKey(homeDir string, content string) {
 		}
 
 		if len(fileContent) == 0 {
-			err = os.WriteFile(filePath, []byte(content), 0644)
+			err = os.WriteFile(filePath, []byte(content), 0o644)
 			if err != nil {
 				fmt.Printf("failed to write default keystore info %v \n", err)
 			}

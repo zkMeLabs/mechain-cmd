@@ -23,7 +23,7 @@ func cmdShowVersion() *cli.Command {
 		Description: `
 
 Examples:
-$ gnfd-cmd version  `,
+$ mechain-cmd version  `,
 	}
 }
 

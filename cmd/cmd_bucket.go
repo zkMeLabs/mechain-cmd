@@ -29,7 +29,7 @@ The command need to set the primary SP address with --primarySP.
 
 Examples:
 # Create a new bucket called gnfd-bucket, visibility is public-read
-$ gnfd-cmd bucket create --visibility=public-read  --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' gnfd://gnfd-bucket`,
+$ mechain-cmd bucket create --visibility=public-read  --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' gnfd://gnfd-bucket`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  primarySPFlag,
@@ -77,7 +77,7 @@ You can update only one item or multiple items at the same time.
 
 Examples:
 update visibility and the payment address of the gnfd-bucket
-$ gnfd-cmd bucket update --visibility=public-read --paymentAddress xx  gnfd://gnfd-bucket`,
+$ mechain-cmd bucket update --visibility=public-read --paymentAddress xx  gnfd://gnfd-bucket`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  paymentFlag,
@@ -111,7 +111,7 @@ func cmdListBuckets() *cli.Command {
 List the bucket names and bucket ids of the user.
 
 Examples:
-$ gnfd-cmd bucket ls`,
+$ mechain-cmd bucket ls`,
 	}
 }
 
@@ -126,10 +126,10 @@ $ gnfd-cmd bucket ls`,
 
 // Examples:
 // # Mirror a bucket using bucket id
-// $ gnfd-cmd bucket mirror --destChainId 97 --id 1
+// $ mechain-cmd bucket mirror --destChainId 97 --id 1
 
 // # Mirror a bucket using bucket name
-// $ gnfd-cmd bucket mirror --destChainId 97 --bucketName yourBucketName
+// $ mechain-cmd bucket mirror --destChainId 97 --bucketName yourBucketName
 // `,
 // 		Flags: []cli.Flag{
 // 			&cli.StringFlag{
@@ -164,7 +164,7 @@ func cmdSetTagForBucket() *cli.Command {
 The command is used to set tag for a given existing bucket.
 
 Examples:
-$ gnfd-cmd bucket setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  gnfd://gnfd-bucket`,
+$ mechain-cmd bucket setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  gnfd://gnfd-bucket`,
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -205,7 +205,6 @@ func setTagForBucket(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -364,8 +363,9 @@ func listBuckets(ctx *cli.Context) error {
 		return nil
 	}
 
-	bucketListRes, err := client.ListBuckets(c, sdktypes.ListBucketsOptions{ShowRemovedBucket: false,
-		Endpoint: spInfo[0].Endpoint,
+	bucketListRes, err := client.ListBuckets(c, sdktypes.ListBucketsOptions{
+		ShowRemovedBucket: false,
+		Endpoint:          spInfo[0].Endpoint,
 	})
 	if err != nil {
 		return toCmdErr(err)
@@ -385,7 +385,6 @@ func listBuckets(ctx *cli.Context) error {
 		}
 	}
 	return nil
-
 }
 
 // func mirrorBucket(ctx *cli.Context) error {

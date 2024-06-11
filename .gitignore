@@ -26,3 +26,5 @@
 
 # Log files
 logs/
+deployment/local/
+mechain-cmd

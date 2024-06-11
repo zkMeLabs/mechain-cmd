@@ -17,7 +17,7 @@ func cmdTaskStatus() *cli.Command {
 		ArgsUsage: "",
 		Description: `
 Examples:
-$ gnfd-cmd task status --taskId 123`,
+$ mechain-cmd task status --taskId 123`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     taskIDFlag,
@@ -37,7 +37,7 @@ func cmdTaskDelete() *cli.Command {
 		ArgsUsage: "",
 		Description: `
 Examples:
-$ gnfd-cmd task delete --taskId 123 `,
+$ mechain-cmd task delete --taskId 123 `,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     taskIDFlag,
@@ -57,7 +57,7 @@ func cmdTaskRetry() *cli.Command {
 		ArgsUsage: "",
 		Description: `
 Examples:
-$ gnfd-cmd task retry --taskId 123 `,
+$ mechain-cmd task retry --taskId 123 `,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     taskIDFlag,
@@ -144,6 +144,6 @@ func getTaskState(ctx *cli.Context) (*TaskState, error) {
 }
 
 func fileExists(path string) bool {
-	_, err := os.Stat(path) //os.Stat获取文件信息
+	_, err := os.Stat(path) // os.Stat获取文件信息
 	return !os.IsNotExist(err)
 }

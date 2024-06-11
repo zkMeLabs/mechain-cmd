@@ -28,7 +28,7 @@ func cmdCreateGroup() *cli.Command {
 Create a new group
 
 Examples:
-$ gnfd-cmd group create --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' group-name`,
+$ mechain-cmd group create --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  tagFlag,
@@ -52,7 +52,7 @@ and remove members list at the same time.
 You need also set group owner using --groupOwner if you are not the owner of the group.
 
 Examples:
-$ gnfd-cmd group update --groupOwner 0x.. --addMembers 0x.. group-name`,
+$ mechain-cmd group update --groupOwner 0x.. --addMembers 0x.. group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  addMemberFlag,
@@ -91,7 +91,7 @@ renew expiration time of a list of group members
 You need also set group owner using --groupOwner if you are not the owner of the group.
 
 Examples:
-$ gnfd-cmd group renew --groupOwner 0x.. --renewMembers 0x..  --expireTime 1691569957 group-name`,
+$ mechain-cmd group renew --groupOwner 0x.. --renewMembers 0x..  --expireTime 1691569957 group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     renewMemberFlag,
@@ -127,7 +127,7 @@ List the members of the specific group
 You need also set group owner using --groupOwner if you are not the owner of the group.
 
 Examples:
-$ gnfd-cmd group ls-member group-name`,
+$ mechain-cmd group ls-member group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     groupOwnerFlag,
@@ -151,7 +151,7 @@ Returns a list of groups owned by the specified user
 You need also set group owner using --groupOwner if you are not the owner of the group.
 
 Examples:
-$ gnfd-cmd group --groupOwner ls`,
+$ mechain-cmd group --groupOwner ls`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     groupOwnerFlag,
@@ -175,7 +175,7 @@ Returns list of all groups that the account has joined
 You need also set the account address using --address if you are not the account
 
 Examples:
-$ gnfd-cmd group ls-belong --address`,
+$ mechain-cmd group ls-belong --address`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     addressFlag,
@@ -198,10 +198,10 @@ $ gnfd-cmd group ls-belong --address`,
 
 // Examples:
 // # Mirror a group using group id
-// $ gnfd-cmd group mirror --destChainId 97 --id 1
+// $ mechain-cmd group mirror --destChainId 97 --id 1
 
 // # Mirror a group using group name
-// $ gnfd-cmd group mirror --destChainId 97 --groupName yourGroupName
+// $ mechain-cmd group mirror --destChainId 97 --groupName yourGroupName
 // `,
 // 		Flags: []cli.Flag{
 // 			&cli.StringFlag{
@@ -236,7 +236,7 @@ func cmdSetTagForGroup() *cli.Command {
 The command is used to set tag for a given existing group.
 
 Examples:
-$ gnfd-cmd group setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  group-name`,
+$ mechain-cmd group setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  group-name`,
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -283,7 +283,6 @@ func setTagForGroup(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -556,7 +555,6 @@ func listGroup(ctx *cli.Context) error {
 	for {
 		groupList, err := client.ListGroupsByOwner(c,
 			sdktypes.GroupsOwnerPaginationOptions{Limit: maxListMemberNum, Owner: groupOwner, StartAfter: initStartKey})
-
 		if err != nil {
 			return toCmdErr(err)
 		}

@@ -23,7 +23,7 @@ Create a payment account
 
 Examples:
 # Create a payment account
-$ gnfd-cmd payment-account create`,
+$ mechain-cmd payment-account create`,
 	}
 }
 
@@ -63,7 +63,7 @@ Make a deposit into stream(payment) account
 
 Examples:
 # deposit a stream account
-$ gnfd-cmd payment-account deposit --toAddress 0x.. --amount 12345`,
+$ mechain-cmd payment-account deposit --toAddress 0x.. --amount 12345`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     toAddressFlag,
@@ -123,7 +123,7 @@ Make a withdrawal from stream(payment) account
 
 Examples:
 # withdraw from a stream account back to the creator account
-$ gnfd-cmd payment-account withdraw --fromAddress 0x.. --amount 12345`,
+$ mechain-cmd payment-account withdraw --fromAddress 0x.. --amount 12345`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     fromAddressFlag,
@@ -184,7 +184,7 @@ func cmdListPaymentAccounts() *cli.Command {
 List payment accounts of the owner.
 
 Examples:
-$ gnfd-cmd payment-account ls `,
+$ mechain-cmd payment-account ls `,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  ownerAddressFlag,

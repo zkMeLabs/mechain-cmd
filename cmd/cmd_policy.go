@@ -38,7 +38,7 @@ the resource url can be the follow types:
 if your need to set a group policy, you need set the owneraddress as your own account address.
 
 Examples:
-$ gnfd-cmd policy put --groupId 111 --actions get,delete grn:o::gnfd-bucket/gnfd-object`,
+$ mechain-cmd policy put --groupId 111 --actions get,delete grn:o::gnfd-bucket/gnfd-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,
@@ -96,7 +96,7 @@ the resource url can be the follow types:
 3) grn:g:owneraddress:groupname, it indicates the group policy
 
 Examples:
-$ gnfd-cmd policy rm --groupId 111  grn:o::gnfd-bucket/gnfd-object`,
+$ mechain-cmd policy rm --groupId 111  grn:o::gnfd-bucket/gnfd-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,
@@ -128,7 +128,7 @@ the resource url can be the follow types:
 3) grn:g:owneraddress:groupname, it indicates the group policy
 
 Examples:
-$ gnfd-cmd policy ls --groupId 111  grn:o::gnfd-bucket/gnfd-object`,
+$ mechain-cmd policy ls --groupId 111  grn:o::gnfd-bucket/gnfd-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,
@@ -336,7 +336,7 @@ func handleListPolicy(ctx *cli.Context, resource string, policyType ResourceType
 	if err != nil {
 		return err
 	}
-	//groupId := ctx.Uint64(groupIDFlag)
+	// groupId := ctx.Uint64(groupIDFlag)
 	grantee := ctx.String(granteeFlag)
 
 	if policyType == BucketResourceType {
@@ -379,7 +379,8 @@ func handleListPolicy(ctx *cli.Context, resource string, policyType ResourceType
 }
 
 func handleObjectPolicy(ctx *cli.Context, client client.IClient, bucketName, objectName string, principal sdktypes.Principal,
-	statements []*permTypes.Statement, delete bool) error {
+	statements []*permTypes.Statement, delete bool,
+) error {
 	c, cancelObjectPolicy := context.WithCancel(globalContext)
 	defer cancelObjectPolicy()
 
@@ -413,7 +414,8 @@ func handleObjectPolicy(ctx *cli.Context, client client.IClient, bucketName, obj
 }
 
 func handleBucketPolicy(ctx *cli.Context, client client.IClient, bucketName string, principal sdktypes.Principal,
-	statements []*permTypes.Statement, delete bool) error {
+	statements []*permTypes.Statement, delete bool,
+) error {
 	c, cancelBucketPolicy := context.WithCancel(globalContext)
 	defer cancelBucketPolicy()
 
@@ -447,7 +449,8 @@ func handleBucketPolicy(ctx *cli.Context, client client.IClient, bucketName stri
 }
 
 func handleGroupPolicy(ctx *cli.Context, client client.IClient, groupName string,
-	statements []*permTypes.Statement, delete bool) error {
+	statements []*permTypes.Statement, delete bool,
+) error {
 	c, cancelPolicy := context.WithCancel(globalContext)
 	defer cancelPolicy()
 

@@ -24,7 +24,7 @@ func cmdGrantAllowance() *cli.Command {
 The command is used to grant allowance to the grantee. --grantee defines the grantee address, --expire defines the expiration time in second
 
 Examples:
-$ gnfd-cmd fee grant --grantee 0x... --allowance 10000000000000000 --expire 3600`,
+$ mechain-cmd fee grant --grantee 0x... --allowance 10000000000000000 --expire 3600`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  granteeFlag,

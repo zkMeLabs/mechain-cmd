@@ -18,7 +18,7 @@ func cmdHeadObj() *cli.Command {
 		Description: `
 send headObject txn to chain and fetch object info on greenfield chain
 Examples:
-$ gnfd-cmd object head gnfd://bucket-name/object-name`,
+$ mechain-cmd object head gnfd://bucket-name/object-name`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name:    formatFlag,
@@ -43,7 +43,7 @@ func cmdHeadBucket() *cli.Command {
 		Description: `
 send headBucket txn to chain and fetch bucket info on greenfield chain
 Examples:
-$ gnfd-cmd bucket head gnfd://bucket-name`,
+$ mechain-cmd bucket head gnfd://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name:    formatFlag,
@@ -68,7 +68,7 @@ func cmdHeadGroup() *cli.Command {
 		Description: `
 send headGroup txn to chain and fetch bucketInfo on greenfield chain
 Examples:
-$ gnfd-cmd group head --groupOwner  group-name`,
+$ mechain-cmd group head --groupOwner  group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  groupOwnerFlag,
@@ -99,7 +99,7 @@ func cmdHeadGroupMember() *cli.Command {
 send headGroupMember txn to chain and check if member is in the group
 
 Examples:
-$ gnfd-cmd head-member 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d  group-name`,
+$ mechain-cmd head-member 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d  group-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  groupOwnerFlag,
