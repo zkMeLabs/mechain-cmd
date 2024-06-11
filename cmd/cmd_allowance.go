@@ -8,8 +8,8 @@ import (
 
 	"cosmossdk.io/math"
 
-	"github.com/bnb-chain/greenfield/sdk/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/evmos/evmos/v12/sdk/types"
 	"github.com/urfave/cli/v2"
 )
 

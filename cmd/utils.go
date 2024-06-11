@@ -28,9 +28,9 @@ import (
 
 	sdkutils "github.com/bnb-chain/greenfield-go-sdk/pkg/utils"
 	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
-	"github.com/bnb-chain/greenfield/sdk/types"
-	permTypes "github.com/bnb-chain/greenfield/x/permission/types"
-	storageTypes "github.com/bnb-chain/greenfield/x/storage/types"
+	"github.com/evmos/evmos/v12/sdk/types"
+	permTypes "github.com/evmos/evmos/v12/x/permission/types"
+	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
 )
 
 const (
