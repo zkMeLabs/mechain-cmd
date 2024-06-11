@@ -36,9 +36,9 @@ Note that the  uploading with recursive flag only support folder.
 
 Examples:
 # create object and upload file to storage provider, the corresponding object is gnfd-object
-$ gnfd-cmd object put file.txt gnfd://gnfd-bucket/gnfd-object,
+$ mechain-cmd object put file.txt gnfd://gnfd-bucket/gnfd-object,
 # upload the files inside the folders
-$ gnfd-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName gnfd://bucket-name`,
+$ mechain-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName gnfd://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  secondarySPFlag,
@@ -103,7 +103,7 @@ Download a specific object from storage provider
 
 Examples:
 # download an object payload to file
-$ gnfd-cmd object get gnfd://gnfd-bucket/gnfd-object  file.txt `,
+$ mechain-cmd object get gnfd://gnfd-bucket/gnfd-object  file.txt `,
 		Flags: []cli.Flag{
 			&cli.Int64Flag{
 				Name:  startOffsetFlag,
@@ -149,7 +149,7 @@ func cmdCancelObjects() *cli.Command {
 Cancel the created object 
 
 Examples:
-$ gnfd-cmd object cancel  gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object cancel  gnfd://gnfd-bucket/gnfd-object`,
 	}
 }
 
@@ -164,7 +164,7 @@ func cmdListObjects() *cli.Command {
 List Objects of the bucket, including object name, object id, object status
 
 Examples:
-$ gnfd-cmd object ls gnfd://gnfd-bucket`,
+$ mechain-cmd object ls gnfd://gnfd-bucket`,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  recursiveFlag,
@@ -188,7 +188,7 @@ The visibility value can be public-read, private or inherit.
 
 Examples:
 update visibility of the gnfd-object
-$ gnfd-cmd object update --visibility=public-read  gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object update --visibility=public-read  gnfd://gnfd-bucket/gnfd-object`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name: visibilityFlag,
@@ -214,7 +214,7 @@ The command is used to get the uploading progress info.
 you can use this command to view the progress information during the process of uploading a file to a Storage Provider.
 
 Examples:
-$ gnfd-cmd object get-progress gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object get-progress gnfd://gnfd-bucket/gnfd-object`,
 	}
 }
 
@@ -229,10 +229,10 @@ $ gnfd-cmd object get-progress gnfd://gnfd-bucket/gnfd-object`,
 
 // Examples:
 // # Mirror a object using object id
-// $ gnfd-cmd object mirror --destChainId 97 --id 1
+// $ mechain-cmd object mirror --destChainId 97 --id 1
 
 // # Mirror a object using bucket and object name
-// $ gnfd-cmd object mirror --destChainId 97 --bucketName yourBucketName --objectName yourObjectName
+// $ mechain-cmd object mirror --destChainId 97 --bucketName yourBucketName --objectName yourObjectName
 // `,
 // 		Flags: []cli.Flag{
 // 			&cli.StringFlag{
@@ -273,7 +273,7 @@ func cmdSetTagForObject() *cli.Command {
 The command is used to set tag for a given existing object.
 
 Examples:
-$ gnfd-cmd object setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' gnfd://gnfd-bucket/gnfd-object`,
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -320,7 +320,6 @@ func setTagForObject(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -440,7 +439,8 @@ func putObject(ctx *cli.Context) error {
 
 // uploadFolder upload folder and the files inside to bucket in a recursive way
 func uploadFolder(urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient) error {
+	gnfdClient client.IClient,
+) error {
 	// upload folder with recursive flag
 	bucketName := ParseBucket(urlInfo)
 	if bucketName == "" {
@@ -466,7 +466,7 @@ func uploadFolder(urlInfo string, ctx *cli.Context,
 
 	fmt.Println("================================================")
 	fmt.Println("Your batch upload is submitted as a task, task ID is " + taskID)
-	fmt.Println("You can check your task status and progress by using cmd as below:\n\n- List all your tasks: ./gnfd-cmd task ls\n- Check status: ./gnfd-cmd task status --task.id taskID\n- Retry (in case this process is killed accidentally): ./gnfd-cmd task retry --task.id taskID\n- Delete task: ...\n\n>>================================================")
+	fmt.Println("You can check your task status and progress by using cmd as below:\n\n- List all your tasks: ./mechain-cmd task ls\n- Check status: ./mechain-cmd task status --task.id taskID\n- Retry (in case this process is killed accidentally): ./mechain-cmd task retry --task.id taskID\n- Delete task: ...\n\n>>================================================")
 	fmt.Println("Upload Task building")
 
 	taskState := &TaskState{
@@ -662,7 +662,8 @@ func stateSync(ctx context.Context, homeDir string, state *TaskState) {
 }
 
 func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64) error {
+	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64,
+) error {
 	var file *os.File
 	contentType := ctx.String(contentTypeFlag)
 	secondarySPAccs := ctx.String(secondarySPFlag)
@@ -825,7 +826,8 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 }
 
 func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag UploadFlag,
-	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64) error {
+	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64,
+) error {
 	var file *os.File
 
 	opts := sdktypes.CreateObjectOptions{}
@@ -864,7 +866,6 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 	defer cancelPutObject()
 
 	_, err := gnfdClient.HeadObject(c, bucketName, objectName)
-
 	// if err==nil, object exist on chain, no need to createObject
 	if err != nil {
 		if uploadSingleFolder {
@@ -1004,7 +1005,7 @@ func getObject(ctx *cli.Context) error {
 			return toCmdErr(err)
 		}
 		// download to the temp file firstly
-		fd, err = os.OpenFile(tempFilePath, os.O_CREATE|os.O_WRONLY, 0660)
+		fd, err = os.OpenFile(tempFilePath, os.O_CREATE|os.O_WRONLY, 0o660)
 		if err != nil {
 			return err
 		}
@@ -1113,16 +1114,20 @@ func listObjectByPage(cli client.IClient, c context.Context, bucketName, prefixN
 
 	for {
 		if isRecursive {
-			listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{ShowRemovedObject: false,
+			listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{
+				ShowRemovedObject: false,
 				MaxKeys:           defaultMaxKey,
 				ContinuationToken: continuationToken,
-				Prefix:            prefixName})
+				Prefix:            prefixName,
+			})
 		} else {
-			listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{ShowRemovedObject: false,
+			listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{
+				ShowRemovedObject: false,
 				Delimiter:         "/",
 				MaxKeys:           defaultMaxKey,
 				ContinuationToken: continuationToken,
-				Prefix:            prefixName})
+				Prefix:            prefixName,
+			})
 		}
 		if err != nil {
 			return toCmdErr(err)
@@ -1150,7 +1155,6 @@ func printListResult(listResult sdktypes.ListObjectsResult) {
 	for _, prefix := range listResult.CommonPrefixes {
 		fmt.Printf("%s %15s %s \n", strings.Repeat(" ", len(iso8601DateFormat)), "PRE", prefix)
 	}
-
 }
 
 func updateObject(ctx *cli.Context) error {

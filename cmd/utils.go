@@ -96,7 +96,7 @@ const (
 	GroupResourceType  = 3
 
 	DefaultConfigPath  = "config/config.toml"
-	DefaultConfigDir   = ".gnfd-cmd"
+	DefaultConfigDir   = ".mechain-cmd"
 	DefaultAccountPath = "account/defaultKey"
 	DefaultKeyDir      = "keystore"
 
@@ -318,6 +318,7 @@ func parsePrincipal(grantee string, groupId uint64) (sdktypes.Principal, error) 
 
 	return principal, nil
 }
+
 func getBucketAction(action string) (permTypes.ActionType, bool, error) {
 	switch action {
 	case "update":
@@ -502,11 +503,11 @@ func loadConfig(ctx *cli.Context) (*cmdConfig, error) {
 	// if config default path not exist, create the config file with default test net config
 	_, err = os.Stat(configPath)
 	if os.IsNotExist(err) {
-		if err = os.MkdirAll(filepath.Dir(configPath), 0700); err != nil {
+		if err = os.MkdirAll(filepath.Dir(configPath), 0o700); err != nil {
 			return nil, toCmdErr(errors.New("failed to create config file directory :%s" + filepath.Dir(configPath)))
 		}
 
-		err = os.WriteFile(configPath, []byte(configContent), 0644)
+		err = os.WriteFile(configPath, []byte(configContent), 0o644)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create config file: %v", err)
 		}
@@ -604,7 +605,6 @@ func getKeystoreFileByAddress(directory string, address string) (string, error) 
 		}
 		return nil
 	})
-
 	if err != nil {
 		return "", err
 	}
@@ -797,11 +797,11 @@ func getContentTypeOfFile(filePath string) (string, error) {
 }
 
 func createAndWriteFile(fileName string, content []byte) error {
-	if err := os.MkdirAll(filepath.Dir(fileName), 0700); err != nil {
+	if err := os.MkdirAll(filepath.Dir(fileName), 0o700); err != nil {
 		return toCmdErr(errors.New("failed to create directory %s" + filepath.Dir(fileName)))
 	}
 
-	if err := os.WriteFile(fileName, content, 0600); err != nil {
+	if err := os.WriteFile(fileName, content, 0o600); err != nil {
 		return toCmdErr(fmt.Errorf("failed to write keyfile to the path%s: %v", fileName, err))
 	}
 	return nil

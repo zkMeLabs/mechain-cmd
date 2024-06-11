@@ -3,17 +3,16 @@
 ---
 Greenfield client cmd tool, supporting commands to make requests to greenfield
 
-
 ## Disclaimer
+
 **The software and related documentation are under active development, all subject to potential future change without
 notification and not ready for production use. The code and security audit have not been fully completed and not ready
 for any bug bounty. We advise you to be careful and experiment on the network at your own risk. Stay safe out there.**
 
 ## Cmd usage
 
-
-Greenfield is still undergoing rapid development iterations, and greenfield-cmd also needs to be continuously updated and adapted. When using it, please do not directly use the master branch or develop branch. If you are using this tool on the Greenfield Mainnet, please switch to the latest official release version. 
-To obtain the latest release, please visit the following URL: https://github.com/bnb-chain/greenfield-cmd/releases.
+Greenfield is still undergoing rapid development iterations, and greenfield-cmd also needs to be continuously updated and adapted. When using it, please do not directly use the master branch or develop branch. If you are using this tool on the Greenfield Mainnet, please switch to the latest official release version.
+To obtain the latest release, please visit the following URL: <https://github.com/bnb-chain/greenfield-cmd/releases>.
 
 ### installation
 
@@ -24,33 +23,35 @@ cd greenfield-cmd
 git checkout -b branch-name v1.0.2
 make build
 cd build
-./gnfd-cmd -h
+./mechain-cmd -h
 ```
 
-### basic config 
+### basic config
 
-The command tool supports the "--home" option to specify the path of the config file and the keystore, the default path is a directory called ".gnfd-cmd" under the home directory of the system.
-When running commands that interact with the greenfield, if there is no config/config.toml file under the path and the commands runs without "--config" flag, 
+The command tool supports the "--home" option to specify the path of the config file and the keystore, the default path is a directory called ".mechain-cmd" under the home directory of the system.
+When running commands that interact with the greenfield, if there is no config/config.toml file under the path and the commands runs without "--config" flag,
 the tool will generate the config/config.toml file automatically which is consistent with the testnet configuration under the path.
 
 Below is an example of the config file. The rpcAddr and chainId should be consistent with the Greenfield network.
 For Greenfield Mainnet, you can refer to [Greenfield Mainnet RPC Endpoints](https://docs.bnbchain.org/greenfield-docs/docs/api/endpoints).
 The rpcAddr indicates the Tendermint RPC address with the port info.
+
 ```
 rpcAddr = "https://greenfield-chain.bnbchain.org:443"
 chainId = "greenfield_1017-1"
 ```
+
 The command tool can also support other networks besides the Mainnet.
 you can replace the content of a custom config file in the default config directory with config.toml or
 run command with "-c filepath" to set the custom config file.
 
-
 #### Get help
 
 The commands support different kinds of commands, including bucket,object,group,bank,policy,sp,payment-account and account.
+
 ```
 // get help for supporing commands and basic command format
-gnfd-cmd -h
+mechain-cmd -h
    bucket           support the bucket operation functions, including create/update/delete/head/list and so on
    object           support the object operation functions, including put/get/update/delete/head/list and so on
    group            support the group operation functions, including create/update/delete/head/head-member/mirror
@@ -63,14 +64,16 @@ gnfd-cmd -h
 
 ```
 
-The following command can be used to obtain help information for commands. For example, you can use "gnfd-cmd object -h" to obtain the subcommand infos under the object command.
+The following command can be used to obtain help information for commands. For example, you can use "mechain-cmd object -h" to obtain the subcommand infos under the object command.
+
 ```
-gnfd-cmd [command-name] -h
+mechain-cmd [command-name] -h
 ```
 
-The following command can be used to obtain help information for subcommands. For example, you can use "gnfd-cmd object update -h" to obtain the help info to update object.
+The following command can be used to obtain help information for subcommands. For example, you can use "mechain-cmd object update -h" to obtain the help info to update object.
+
 ```
-gnfd-cmd [command-name][subcommand-name] -h
+mechain-cmd [command-name][subcommand-name] -h
 ```
 
 ### Precautions
@@ -84,7 +87,6 @@ All the other commands need to run with -k if the keystore is not on the default
 
 4. The "gnfd://" is a fixed prefix which representing the greenfield object or bucket.
 
-
 ### Examples
 
 #### Init Accounts
@@ -94,7 +96,7 @@ Users can use "account import [keyfile]" to generate the keystore.  Before impor
 ```
 // import private key and generate keystore key.json
 // The key.txt contain the plaintext private key. After the keystore file has been generated, user can delete the private key file key.txt.
-gnfd-cmd account import key.txt
+mechain-cmd account import key.txt
 ```
 
 The keystore will be generated in the path "keystore/keyfile" under the home directory of the system or the directory set by "--home"
@@ -103,56 +105,60 @@ Password info is also needed to run the command. The terminal will prompt user t
 Users can also specify the password file path by using the "--passwordfile".
 Users are responsible for keeping their password information. If the password is lost, it is needed will need to re-import the key.
 
-
 The "account new" command can be used to create a new account for executing commands. However, please note that after creating the account, you need to transfer token to the address of this account before you can send transactions or use storage-related functions.
+
 ```
 // new account and generate keystore key.json
-gnfd-cmd account new
+mechain-cmd account new
 ```
 
 Users can use "account export" or "account ls" to display the keystore information of account.
+
 ```
 // list the account info
-gnfd-cmd account ls
+mechain-cmd account ls
 // export the account key info
-gnfd-cmd account export --unarmoredHex --unsafe
+mechain-cmd account export --unarmoredHex --unsafe
 ```
 
 Users can create multiple accounts using the "account import" or "account new" command. You can use the "set-default" command to specify which account to use for running other commands by default. When executing commands using the default account, there is no need to specify the keystore.
 You can also switch to different accounts for sending requests by specifying the --keystore flag.
+
 ```
 // set the default account.
-gnfd-cmd account set-default [address-info]
+mechain-cmd account set-default [address-info]
 
 // set keystore flag to use other account which is not default
-gnfd-cmd --keystore [keystore-path]  bucket create gnfd://test-bucket
+mechain-cmd --keystore [keystore-path]  bucket create gnfd://test-bucket
 ```
 
 #### Bank Operations
+
 ```
 // transfer to an account in Greenfield
-gnfd-cmd bank transfer --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
+mechain-cmd bank transfer --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
 
 // crosschain transfer some tokens to an account in BSC
-gnfd-cmd bank bridge --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
+mechain-cmd bank bridge --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
 
 // query the balance of account
-gnfd-cmd bank balance --address 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d
+mechain-cmd bank balance --address 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d
 
 ```
 
 #### Storage Provider Operations
 
 The "sp" command is used to list the SP and query the information of SP.
+
 ```
 // list storage providers
-gnfd-cmd sp ls
+mechain-cmd sp ls
 
 // get storage provider info
-gnfd-cmd sp head https://gnfd-testnet-sp-1.nodereal.io
+mechain-cmd sp head https://gnfd-testnet-sp-1.nodereal.io
 
 // get quota and storage price of storage provider:
-gnfd-cmd sp get-price https://gnfd-testnet-sp-1.nodereal.io
+mechain-cmd sp get-price https://gnfd-testnet-sp-1.nodereal.io
 ```
 
 #### Bucket Operations
@@ -164,75 +170,83 @@ and then select the target SP to which the bucket will be created on.
 // create bucket. 
 // The targt primary SP address to which the bucket will be created on need to be set by --primarySP flag.
 // If the primary SP has not been not set, the cmd will choose first SP in the SP list which obtain from chain as the primary SP.
-gnfd-cmd bucket create gnfd://gnfd-bucket
+mechain-cmd bucket create gnfd://gnfd-bucket
 
 // update bucket visibility, charged quota or payment address
-(1) gnfd-cmd bucket update --visibility=public-read gnfd://gnfd-bucket
-(2) gnfd-cmd bucket update --chargedQuota 50000 gnfd://gnfd-bucket
+(1) mechain-cmd bucket update --visibility=public-read gnfd://gnfd-bucket
+(2) mechain-cmd bucket update --chargedQuota 50000 gnfd://gnfd-bucket
 ```
+
 #### Upload/Download Operations
 
 (1) put Object
 
 The "object put" command is used to upload a file from local which is less than 2G. The bucket name and object name should be replaced with specific names and
 the file-path should replace by the file path of local system.
+
 ```
-gnfd-cmd object put --contentType "text/xml" --visibility private file-path gnfd://gnfd-bucket/gnfd-object
+mechain-cmd object put --contentType "text/xml" --visibility private file-path gnfd://gnfd-bucket/gnfd-object
 ```
-if the object name has not been set, the command will use the file name as object name. 
+
+if the object name has not been set, the command will use the file name as object name.
 
 (2) download object
 
 The "object get" command is used to download an object to local path. This command will return the local file path where the object will be downloaded and the file size after successful execution.
+
 ```
-gnfd-cmd object get gnfd://gnfd-bucket/gnfd-object file-path 
+mechain-cmd object get gnfd://gnfd-bucket/gnfd-object file-path 
 ```
-The filepath can be a specific file path, a directory path, or not set at all. 
+
+The filepath can be a specific file path, a directory path, or not set at all.
 If not set, the command will download the content to a file with the same name as the object name in the current directory. If it is set as a directory, the command will download the object file into the directory.
 
 (3) create empty folder
 
 Please note that the object name corresponding to the folder needs to end with "/" as suffix
+
 ```
-gnfd-cmd object put gnfd://gnfd-bucket/folder/
+mechain-cmd object put gnfd://gnfd-bucket/folder/
 ```
 
-(4) upload local folder 
+(4) upload local folder
 
 To upload a local folder (including all the files in it), you can use --recursive flag and specify the local folder path
+
 ```
-gnfd-cmd object put --recursive local-folder-path gnfd://gnfd-bucket
+mechain-cmd object put --recursive local-folder-path gnfd://gnfd-bucket
 ```
 
 (5) upload multiple files
 
-To upload multiple files by one command, you can specify all the file paths that need to be uploaded one by one. 
+To upload multiple files by one command, you can specify all the file paths that need to be uploaded one by one.
 The files will be uploaded to the same bucket.
 
 ```
-gnfd-cmd object put  filepath1 filepath2 ...  gnfd://gnfd-bucket
+mechain-cmd object put  filepath1 filepath2 ...  gnfd://gnfd-bucket
 ```
-
 
 #### Group Operations
 
 The group commands is used to create group, update group members, delete group and query group info.
+
 ```
 // create group
-gnfd-cmd group create gnfd://groupname
+mechain-cmd group create gnfd://groupname
 
 // update group member
-gnfd-cmd group update --addMembers 0xca807A58caF20B6a4E3eDa3531788179E5bc816b gnfd://groupname
+mechain-cmd group update --addMembers 0xca807A58caF20B6a4E3eDa3531788179E5bc816b gnfd://groupname
 
 // head group member
-gnfd-cmd group head-member  0xca807A58caF20B6a4E3eDa3531788179E5bc816b gnfd://groupname
+mechain-cmd group head-member  0xca807A58caF20B6a4E3eDa3531788179E5bc816b gnfd://groupname
 
 // delete group
-gnfd-cmd group delete gnfd://group-name
+mechain-cmd group delete gnfd://group-name
 ```
+
 #### Policy Operations
 
-The gnfd-cmd policy command supports the policy for put/delete resources policy(including objects, buckets, and groups) to the principal.
+The mechain-cmd policy command supports the policy for put/delete resources policy(including objects, buckets, and groups) to the principal.
 
 The principal is need to be set by --grantee which indicates a greenfield account or --groupId which indicates group id.
 
@@ -244,106 +258,118 @@ The group policy actions can be "update", "delete" or "all".
 The policy effect can set to be "allow" or "deny" by --effect
 
 Put policy examples:
+
 ```
 // grant object operation permissions to a group
-gnfd-cmd policy put  --groupId 128  --actions get,delete  grn:o::gnfd-bucket/gnfd-object
+mechain-cmd policy put  --groupId 128  --actions get,delete  grn:o::gnfd-bucket/gnfd-object
 
 // grant object operation permissions to an account
-gnfd-cmd policy put --grantee 0x169321fC04A12c16... --actions get,delete grn:o::gnfd-bucket/gnfd-object
+mechain-cmd policy put --grantee 0x169321fC04A12c16... --actions get,delete grn:o::gnfd-bucket/gnfd-object
 
 // grant bucket operation permissions to a group
-gnfd-cmd policy put --groupId 130 --actions delete,update,createObj  grn:b::gnfd-bucket
+mechain-cmd policy put --groupId 130 --actions delete,update,createObj  grn:b::gnfd-bucket
 
 // grant bucket operation permissions to an account
-gnfd-cmd policy put --grantee 0x169321fC04A12c16... --actions delete,update  grn:b::gnfd-bucket
+mechain-cmd policy put --grantee 0x169321fC04A12c16... --actions delete,update  grn:b::gnfd-bucket
 
 // grant group operation permissions to an account 
-gnfd-cmd policy put --grantee 0x169321fC04A12c16... --actions update  grn:g:owneraddress:gnfd-group
+mechain-cmd policy put --grantee 0x169321fC04A12c16... --actions update  grn:g:owneraddress:gnfd-group
 ```
+
 Delete policy examples:
+
 ```
 // delete the bucket policy from a group
-gnfd-cmd policy delete --groupId 11  grn:b::gnfd-bucket
+mechain-cmd policy delete --groupId 11  grn:b::gnfd-bucket
 
 // delete the object policy from an grantee
-gnfd-cmd policy delete --grantee 0x169321fC04A12c16...  grn:o::gnfd-bucket/gnfd-object
+mechain-cmd policy delete --grantee 0x169321fC04A12c16...  grn:o::gnfd-bucket/gnfd-object
 
 ```
+
 #### List Operations
+
 ```
 // list buckets
-gnfd-cmd bucket ls
+mechain-cmd bucket ls
 
 // list objects of the bucket
-gnfd-cmd object ls gnfd://gnfd-bucket
+mechain-cmd object ls gnfd://gnfd-bucket
 
 // list objects of the bucket in a recursive way
-gnfd-cmd object ls --recursive gnfd://gnfd-bucket
+mechain-cmd object ls --recursive gnfd://gnfd-bucket
 
 // list the objects by prefix 
-gnfd-cmd object ls --recursive gnfd://gnfd-bucket/prefixName
+mechain-cmd object ls --recursive gnfd://gnfd-bucket/prefixName
 ```
+
 #### Delete Operations
+
 ```
 // delete bucekt
-gnfd-cmd bucket delete gnfd://gnfd-bucket
+mechain-cmd bucket delete gnfd://gnfd-bucket
 
 //delete object
-gnfd-cmd object delete gnfd://gnfd-bucket/gnfd-object
+mechain-cmd object delete gnfd://gnfd-bucket/gnfd-object
 
 ```
+
 #### Head Operations
+
 ```
 // head bucekt
-gnfd-cmd bucket head gnfd://gnfd-bucket
+mechain-cmd bucket head gnfd://gnfd-bucket
 
 // head object
-gnfd-cmd object head gnfd://gnfd-bucket/gnfd-object
+mechain-cmd object head gnfd://gnfd-bucket/gnfd-object
 
 // head Group
-gnfd-cmd group head gnfd://groupname
+mechain-cmd group head gnfd://groupname
 ```
+
 #### Payment Operations
+
 ```
 // create a payment account
-gnfd-cmd payment-account create
+mechain-cmd payment-account create
 
 // list payment accounts under owner or a address with optional flag --user 
-gnfd-cmd payment-account ls --owner 0x5a64aCD8DC6Ce41d824638419319409246A9b41A
+mechain-cmd payment-account ls --owner 0x5a64aCD8DC6Ce41d824638419319409246A9b41A
 
 // deposit from owner's account to the payment account 
-gnfd-cmd payment-account deposit --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
+mechain-cmd payment-account deposit --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
 
 // witharaw from a payment account to owner's account
-gnfd-cmd payment-account withdraw --fromAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
+mechain-cmd payment-account withdraw --fromAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
 ```
 
 #### Quota Operations
+
 ```
 // get quota info
-gnfd-cmd bucket get-quota gnfd://gnfd-bucket
+mechain-cmd bucket get-quota gnfd://gnfd-bucket
 
 // buy quota
-gnfd-cmd bucket buy-quota --chargedQuota 1000000 gnfd://gnfd-bucket
+mechain-cmd bucket buy-quota --chargedQuota 1000000 gnfd://gnfd-bucket
 ```
 
 #### Resource mirror Operations
 
 ```
 // mirror a group as NFT to BSC, you might use group id or groupName to identidy the group
-gnfd-cmd group mirror --id 1
+mechain-cmd group mirror --id 1
 or
-gnfd-cmd group mirror --groupName yourGroupName
+mechain-cmd group mirror --groupName yourGroupName
 
 // mirror a bucket as NFT to BSC, you might use bucket id or bucketName to identidy the bucket
-gnfd-cmd bucket mirror --id 1
+mechain-cmd bucket mirror --id 1
 or
-gnfd-cmd bucket mirror --bucketName yourBucketName
+mechain-cmd bucket mirror --bucketName yourBucketName
 
 // mirror a object as NFT to BSC, you might use object id or (bucketName, objectName) to identidy the object
-gnfd-cmd object mirror --id 1
+mechain-cmd object mirror --id 1
 or
-gnfd-cmd object mirror --bucketName yourBucketName --objectName yourObjectName
+mechain-cmd object mirror --bucketName yourBucketName --objectName yourObjectName
 ```
 
 ## Reference

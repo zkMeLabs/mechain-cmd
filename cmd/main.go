@@ -70,7 +70,7 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:  "gnfd-cmd",
+		Name:  "mechain-cmd",
 		Usage: "cmd tool for supporting making request to greenfield",
 		Flags: flags,
 		Commands: []*cli.Command{
@@ -198,5 +198,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

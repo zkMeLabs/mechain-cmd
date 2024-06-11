@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .PHONY: all build
 
 build:
-	go build -o ./build/gnfd-cmd cmd/*.go
+	go build -o ./build/mechain-cmd cmd/*.go
 
 golangci_lint_cmd=golangci-lint
 golangci_version=v1.51.2

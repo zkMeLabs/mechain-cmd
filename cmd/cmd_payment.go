@@ -21,7 +21,7 @@ Update the read quota metadata of the bucket, indicating the target quota of the
 The command need to set the target quota with --chargedQuota 
 
 Examples:
-$ gnfd-cmd payment buy-quota  --chargedQuota 1000000  gnfd://bucket-name`,
+$ mechain-cmd payment buy-quota  --chargedQuota 1000000  gnfd://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:     chargeQuotaFlag,
@@ -73,7 +73,6 @@ func buyQuotaForBucket(ctx *cli.Context) error {
 	}
 
 	txnHash, err := client.BuyQuotaForBucket(c, bucketName, targetQuota, sdktypes.BuyQuotaOption{TxOpts: &TxnOptionWithSyncMode})
-
 	if err != nil {
 		fmt.Println("buy quota error:", err.Error())
 		return nil

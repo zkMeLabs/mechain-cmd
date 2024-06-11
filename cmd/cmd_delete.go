@@ -22,7 +22,7 @@ Send a deleteBucket txn to greenfield chain, the bucket must be empty before del
 
 Examples:
 # Delete an existed bucket called gnfd-bucket
-$ gnfd-cmd bucket rm gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd bucket rm gnfd://gnfd-bucket/gnfd-object`,
 	}
 }
 
@@ -38,7 +38,7 @@ Send a deleteObject txn to greenfield chain
 
 Examples:
 # Delete an existed object called gnfd-object
-$ gnfd-cmd object rm gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object rm gnfd://gnfd-bucket/gnfd-object`,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  recursiveFlag,
@@ -61,7 +61,7 @@ Send a deleteGroup txn to greenfield chain
 
 Examples:
 # Delete an existed group
-$ gnfd-cmd group rm group-name`,
+$ mechain-cmd group rm group-name`,
 	}
 }
 
@@ -172,10 +172,12 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 	)
 
 	for {
-		listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{ShowRemovedObject: false,
+		listResult, err = cli.ListObjects(c, bucketName, sdktypes.ListObjectsOptions{
+			ShowRemovedObject: false,
 			MaxKeys:           defaultMaxKey,
 			ContinuationToken: continuationToken,
-			Prefix:            prefixName})
+			Prefix:            prefixName,
+		})
 		if err != nil {
 			return toCmdErr(err)
 		}
