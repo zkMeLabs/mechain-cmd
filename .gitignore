@@ -21,9 +21,6 @@
 .idea/
 *.iml
 
-# Vscode files
-.vscode/
-
 # Log files
 logs/
 deployment/local/
