@@ -21,6 +21,25 @@
       ]
     },
     {
+      "name": "object create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/local",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/local/testkey/password.txt",
+        "object",
+        "put",
+        "--contentType",
+        "\"application/octet-stream\"",
+        "${workspaceFolder}/go.mod",
+        "gnfd://mechain/go.mod"
+      ]
+    },
+    {
       "name": "version",
       "type": "go",
       "request": "launch",
