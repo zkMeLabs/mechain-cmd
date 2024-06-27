@@ -100,6 +100,29 @@ $ mechain-cmd bucket update --visibility=public-read --paymentAddress xx  gnfd:/
 	}
 }
 
+// cmdMigrateBucket migrate the Bucket to dest PrimarySP
+func cmdMigrateBucket() *cli.Command {
+	return &cli.Command{
+		Name:      "migrate",
+		Action:    migrateBucket,
+		Usage:     "migrate bucket to dstPrimarySP",
+		ArgsUsage: "dstPrimarySPID BUCKET-URL",
+		Description: `
+Get approval of migrating from SP, send the signed migrate bucket msg to mechain and return the txn hash.
+
+Examples:
+migrate the bucket to dest PrimarySP
+$ mechain-cmd bucket migrate dstPrimarySPID gnfd://gnfd-bucket`,
+		Flags: []cli.Flag{
+			&cli.UintFlag{
+				Name:  dstPrimarySPIDFlag,
+				Value: 1,
+				Usage: "indicate the dest primarySP ID",
+			},
+		},
+	}
+}
+
 // cmdListBuckets list the bucket of the owner
 func cmdListBuckets() *cli.Command {
 	return &cli.Command{
@@ -344,6 +367,55 @@ func updateBucket(ctx *cli.Context) error {
 
 	fmt.Printf("latest bucket meta on chain:\nvisibility:%s\nread quota:%d\npayment address:%s \n", bucketInfo.GetVisibility().String(),
 		bucketInfo.GetChargedReadQuota(), bucketInfo.GetPaymentAddress())
+	return nil
+}
+
+// migrateBucket Get approval of migrating from SP, send the signed migrate bucket msg to greenfield chain and return the txn hash
+func migrateBucket(ctx *cli.Context) error {
+	bucketName, err := getBucketNameByUrl(ctx)
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	c, cancelMigrateBucket := context.WithCancel(globalContext)
+	defer cancelMigrateBucket()
+
+	// if bucket not exist, no need to migrate it
+	_, err = client.HeadBucket(c, bucketName)
+	if err != nil {
+		return toCmdErr(ErrBucketNotExist)
+	}
+
+	opts := sdktypes.MigrateBucketOptions{}
+	dstPrimarySPID := ctx.Uint(dstPrimarySPIDFlag)
+
+	opts.TxOpts = &TxnOptionWithSyncMode
+
+	txnHash, err := client.MigrateBucket(c, bucketName, uint32(dstPrimarySPID), opts)
+	if err != nil {
+		fmt.Println("migrate bucket error:", err.Error())
+		return nil
+	}
+
+	err = waitTxnStatus(client, c, txnHash, "MigrateBucket")
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	bucketInfo, err := client.HeadBucket(c, bucketName)
+	if err != nil {
+		// head fail, no need to print the error
+		return nil
+	}
+
+	fmt.Printf("latest bucket meta on chain:\nvisibility:%s\nread quota:%d\npayment address:%s \n", bucketInfo.GetVisibility().String(),
+		bucketInfo.GetChargedReadQuota(), bucketInfo.GetPaymentAddress())
+	fmt.Println("transaction hash: ", txnHash)
 	return nil
 }
 
