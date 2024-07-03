@@ -43,6 +43,7 @@ const (
 	effectAllow             = "allow"
 	effectDeny              = "deny"
 	primarySPFlag           = "primarySP"
+	dstPrimarySPIDFlag      = "dstPrimarySPID"
 	chargeQuotaFlag         = "chargedQuota"
 	visibilityFlag          = "visibility"
 	tagFlag                 = "tags"

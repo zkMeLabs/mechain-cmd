@@ -80,6 +80,7 @@ func main() {
 				Subcommands: []*cli.Command{
 					cmdCreateBucket(),
 					cmdUpdateBucket(),
+					cmdMigrateBucket(),
 					cmdDelBucket(),
 					cmdHeadBucket(),
 					cmdListBuckets(),
