@@ -1,0 +1,2 @@
+rpcAddr = "http://154.48.244.31:26657"
+chainId = "mechain_1000000-121"
