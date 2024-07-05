@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/urfave/cli/v2"
 
 	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
@@ -187,44 +189,44 @@ $ mechain-cmd group ls-belong --address`,
 	}
 }
 
-// func cmdMirrorGroup() *cli.Command {
-// 	return &cli.Command{
-// 		Name:      "mirror",
-// 		Action:    mirrorGroup,
-// 		Usage:     "mirror group to BSC",
-// 		ArgsUsage: "",
-// 		Description: `
-// Mirror a group as NFT to BSC
+func cmdMirrorGroup() *cli.Command {
+	return &cli.Command{
+		Name:      "mirror",
+		Action:    mirrorGroup,
+		Usage:     "mirror group to BSC",
+		ArgsUsage: "",
+		Description: `
+Mirror a group as NFT to BSC
 
-// Examples:
-// # Mirror a group using group id
-// $ mechain-cmd group mirror --destChainId 97 --id 1
+Examples:
+# Mirror a group using group id
+$ mechain-cmd group mirror --destChainId 97 --id 1
 
-// # Mirror a group using group name
-// $ mechain-cmd group mirror --destChainId 97 --groupName yourGroupName
-// `,
-// 		Flags: []cli.Flag{
-// 			&cli.StringFlag{
-// 				Name:     DestChainIdFlag,
-// 				Value:    "",
-// 				Usage:    "target chain id",
-// 				Required: true,
-// 			},
-// 			&cli.StringFlag{
-// 				Name:     IdFlag,
-// 				Value:    "",
-// 				Usage:    "group id",
-// 				Required: false,
-// 			},
-// 			&cli.StringFlag{
-// 				Name:     groupNameFlag,
-// 				Value:    "",
-// 				Usage:    "group name",
-// 				Required: false,
-// 			},
-// 		},
-// 	}
-// }
+# Mirror a group using group name
+$ mechain-cmd group mirror --destChainId 97 --groupName yourGroupName
+`,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     DestChainIdFlag,
+				Value:    "",
+				Usage:    "target chain id",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     IdFlag,
+				Value:    "",
+				Usage:    "group id",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     groupNameFlag,
+				Value:    "",
+				Usage:    "group name",
+				Required: false,
+			},
+		},
+	}
+}
 
 func cmdSetTagForGroup() *cli.Command {
 	return &cli.Command{
@@ -283,6 +285,7 @@ func setTagForGroup(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
+
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -555,6 +558,7 @@ func listGroup(ctx *cli.Context) error {
 	for {
 		groupList, err := client.ListGroupsByOwner(c,
 			sdktypes.GroupsOwnerPaginationOptions{Limit: maxListMemberNum, Owner: groupOwner, StartAfter: initStartKey})
+
 		if err != nil {
 			return toCmdErr(err)
 		}
@@ -664,25 +668,25 @@ func getGroupOwner(ctx *cli.Context) (string, error) {
 	return k.Address, nil
 }
 
-// func mirrorGroup(ctx *cli.Context) error {
-// 	destChainId := ctx.Int64(DestChainIdFlag)
-// 	id := math.NewUint(0)
-// 	if ctx.String(IdFlag) != "" {
-// 		id = math.NewUintFromString(ctx.String(IdFlag))
-// 	}
-// 	groupName := ctx.String(groupNameFlag)
-// 	c, cancelContext := context.WithCancel(globalContext)
-// 	defer cancelContext()
+func mirrorGroup(ctx *cli.Context) error {
+	destChainId := ctx.Int64(DestChainIdFlag)
+	id := math.NewUint(0)
+	if ctx.String(IdFlag) != "" {
+		id = math.NewUintFromString(ctx.String(IdFlag))
+	}
+	groupName := ctx.String(groupNameFlag)
+	c, cancelContext := context.WithCancel(globalContext)
+	defer cancelContext()
 
-// 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
-// 	if err != nil {
-// 		return toCmdErr(err)
-// 	}
-// 	txResp, err := client.MirrorGroup(c, sdk.ChainID(destChainId), id, groupName, types.TxOption{})
-// 	if err != nil {
-// 		return toCmdErr(err)
-// 	}
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	if err != nil {
+		return toCmdErr(err)
+	}
+	txResp, err := client.MirrorGroup(c, sdk.ChainID(destChainId), id, groupName, types.TxOption{})
+	if err != nil {
+		return toCmdErr(err)
+	}
 
-// 	fmt.Printf("mirror_group: %s \ntransaction hash: %s\n", groupName, txResp.TxHash)
-// 	return nil
-// }
+	fmt.Printf("mirror_group: %s \ntransaction hash: %s\n", groupName, txResp.TxHash)
+	return nil
+}

@@ -86,7 +86,7 @@ func main() {
 					cmdListBuckets(),
 					cmdBuyQuota(),
 					cmdGetQuotaInfo(),
-					// cmdMirrorBucket(),
+					cmdMirrorBucket(),
 					cmdSetTagForBucket(),
 				},
 			},
@@ -103,7 +103,7 @@ func main() {
 					cmdCalHash(),
 					cmdUpdateObject(),
 					cmdGetUploadProgress(),
-					// cmdMirrorObject(),
+					cmdMirrorObject(),
 					cmdSetTagForObject(),
 				},
 			},
@@ -116,7 +116,7 @@ func main() {
 					cmdHeadGroup(),
 					cmdHeadGroupMember(),
 					cmdDelGroup(),
-					// cmdMirrorGroup(),
+					cmdMirrorGroup(),
 					cmdRenewGroup(),
 					cmdListGroup(),
 					cmdListGroupMember(),
@@ -131,7 +131,7 @@ func main() {
 				Subcommands: []*cli.Command{
 					cmdTransfer(),
 					cmdGetAccountBalance(),
-					// cmdBridge(),
+					cmdBridge(),
 				},
 			},
 			{
@@ -199,4 +199,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }

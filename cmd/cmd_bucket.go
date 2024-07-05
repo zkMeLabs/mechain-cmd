@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"time"
 
+	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/urfave/cli/v2"
 
 	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
@@ -138,44 +140,44 @@ $ mechain-cmd bucket ls`,
 	}
 }
 
-// func cmdMirrorBucket() *cli.Command {
-// 	return &cli.Command{
-// 		Name:      "mirror",
-// 		Action:    mirrorBucket,
-// 		Usage:     "mirror bucket to BSC",
-// 		ArgsUsage: "",
-// 		Description: `
-// Mirror a bucket as NFT to BSC
+func cmdMirrorBucket() *cli.Command {
+	return &cli.Command{
+		Name:      "mirror",
+		Action:    mirrorBucket,
+		Usage:     "mirror bucket to BSC",
+		ArgsUsage: "",
+		Description: `
+Mirror a bucket as NFT to BSC
 
-// Examples:
-// # Mirror a bucket using bucket id
-// $ mechain-cmd bucket mirror --destChainId 97 --id 1
+Examples:
+# Mirror a bucket using bucket id
+$ mechain-cmd bucket mirror --destChainId 97 --id 1
 
-// # Mirror a bucket using bucket name
-// $ mechain-cmd bucket mirror --destChainId 97 --bucketName yourBucketName
-// `,
-// 		Flags: []cli.Flag{
-// 			&cli.StringFlag{
-// 				Name:     DestChainIdFlag,
-// 				Value:    "",
-// 				Usage:    "target chain id",
-// 				Required: true,
-// 			},
-// 			&cli.StringFlag{
-// 				Name:     IdFlag,
-// 				Value:    "",
-// 				Usage:    "bucket id",
-// 				Required: false,
-// 			},
-// 			&cli.StringFlag{
-// 				Name:     bucketNameFlag,
-// 				Value:    "",
-// 				Usage:    "bucket name",
-// 				Required: false,
-// 			},
-// 		},
-// 	}
-// }
+# Mirror a bucket using bucket name
+$ mechain-cmd bucket mirror --destChainId 97 --bucketName yourBucketName
+`,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     DestChainIdFlag,
+				Value:    "",
+				Usage:    "target chain id",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     IdFlag,
+				Value:    "",
+				Usage:    "bucket id",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     bucketNameFlag,
+				Value:    "",
+				Usage:    "bucket name",
+				Required: false,
+			},
+		},
+	}
+}
 
 func cmdSetTagForBucket() *cli.Command {
 	return &cli.Command{
@@ -228,6 +230,7 @@ func setTagForBucket(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
+
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -459,25 +462,25 @@ func listBuckets(ctx *cli.Context) error {
 	return nil
 }
 
-// func mirrorBucket(ctx *cli.Context) error {
-// 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
-// 	if err != nil {
-// 		return toCmdErr(err)
-// 	}
-// 	id := math.NewUint(0)
-// 	if ctx.String(IdFlag) != "" {
-// 		id = math.NewUintFromString(ctx.String(IdFlag))
-// 	}
-// 	destChainId := ctx.Int64(DestChainIdFlag)
-// 	bucketName := ctx.String(bucketNameFlag)
+func mirrorBucket(ctx *cli.Context) error {
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	if err != nil {
+		return toCmdErr(err)
+	}
+	id := math.NewUint(0)
+	if ctx.String(IdFlag) != "" {
+		id = math.NewUintFromString(ctx.String(IdFlag))
+	}
+	destChainId := ctx.Int64(DestChainIdFlag)
+	bucketName := ctx.String(bucketNameFlag)
 
-// 	c, cancelContext := context.WithCancel(globalContext)
-// 	defer cancelContext()
+	c, cancelContext := context.WithCancel(globalContext)
+	defer cancelContext()
 
-// 	txResp, err := client.MirrorBucket(c, sdk.ChainID(destChainId), id, bucketName, types.TxOption{})
-// 	if err != nil {
-// 		return toCmdErr(err)
-// 	}
-// 	fmt.Printf("mirror bucket succ, txHash: %s\n", txResp.TxHash)
-// 	return nil
-// }
+	txResp, err := client.MirrorBucket(c, sdk.ChainID(destChainId), id, bucketName, types.TxOption{})
+	if err != nil {
+		return toCmdErr(err)
+	}
+	fmt.Printf("mirror bucket succ, txHash: %s\n", txResp.TxHash)
+	return nil
+}
