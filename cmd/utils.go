@@ -585,7 +585,7 @@ func loadKeyStoreFile(ctx *cli.Context) ([]byte, string, error) {
 	// fetch private key from keystore
 	content, err := os.ReadFile(keyfilePath)
 	if err != nil {
-		return nil, "", fmt.Errorf("failed to read the keyfile at '%s': %v \n", keyfilePath, err)
+		return nil, "", fmt.Errorf("failed to read the keyfile at '%s': %v", keyfilePath, err)
 	}
 
 	return content, keyfilePath, nil
@@ -760,7 +760,7 @@ func checkIfDownloadFileExist(filePath, objectName string) (string, error) {
 			filePath = filePath + "/" + objectName
 			return filePath, nil
 		}
-		return filePath, fmt.Errorf("download file:%s already exist\n", filePath)
+		return filePath, fmt.Errorf("download file:%s already exist", filePath)
 	}
 	return filePath, nil
 }
@@ -811,7 +811,7 @@ func createAndWriteFile(fileName string, content []byte) error {
 func readFile(fileName string) ([]byte, error) {
 	content, err := os.ReadFile(fileName)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read the keyfile at '%s': %v \n", fileName, err)
+		return nil, fmt.Errorf("failed to read the keyfile at '%s': %v", fileName, err)
 	}
 
 	return content, nil
