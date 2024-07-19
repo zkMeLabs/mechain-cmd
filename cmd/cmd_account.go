@@ -320,7 +320,7 @@ func listKeyStore(keystoreDir, defaultAccount string) error {
 			keyPath := filepath.Join(keystoreDir, file.Name())
 			keyFileContent, err = os.ReadFile(keyPath)
 			if err != nil {
-				return fmt.Errorf("failed to read the keyfile at '%s': %v \n", keyPath, err)
+				return fmt.Errorf("failed to read the keyfile at '%s': %v", keyPath, err)
 			}
 
 			k := new(encryptedKey)
@@ -545,7 +545,7 @@ func parseKeystore(ctx *cli.Context) (string, string, error) {
 
 	privateKey, err := DecryptKey(keyjson, password)
 	if err != nil {
-		return "", "", fmt.Errorf("failed to decrypting key: %v \n", err)
+		return "", "", fmt.Errorf("failed to decrypting key: %v", err)
 	}
 
 	return privateKey, keyFile, nil

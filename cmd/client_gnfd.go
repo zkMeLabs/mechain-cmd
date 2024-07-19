@@ -8,7 +8,6 @@ import (
 
 	"github.com/bnb-chain/greenfield-go-sdk/client"
 	"github.com/bnb-chain/greenfield-go-sdk/types"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/urfave/cli/v2"
 )
 
@@ -47,7 +46,7 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 			return nil, err
 		}
 
-		account, err = sdktypes.NewAccountFromPrivateKey("gnfd-account", privateKey)
+		account, err = types.NewAccountFromPrivateKey("gnfd-account", privateKey)
 		if err != nil {
 			fmt.Println("new account err", err.Error())
 			return nil, err

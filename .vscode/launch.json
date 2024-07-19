@@ -12,9 +12,9 @@
       "program": "${workspaceFolder}/cmd",
       "args": [
         "--home",
-        "${workspaceFolder}/deployment/devnet",
+        "${workspaceFolder}/deployment/localup",
         "--passwordfile",
-        "${workspaceFolder}/deployment/devnet/testkey/password.txt",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
         "bucket",
         "ls"
       ]
