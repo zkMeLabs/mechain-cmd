@@ -448,11 +448,12 @@ func loadKey(file string) (string, sdk.AccAddress, error) {
 	r := bufio.NewReader(fd)
 	buf := make([]byte, 64)
 	var n int
+OUTER:
 	for ; n < len(buf); n++ {
 		buf[n], err = r.ReadByte()
 		switch {
 		case err == io.EOF || buf[n] < '!':
-			break
+			break OUTER
 		case err != nil:
 			return "", nil, err
 		}
@@ -467,7 +468,7 @@ func loadKey(file string) (string, sdk.AccAddress, error) {
 	}
 
 	if len(priBytes) != 32 {
-		return "", nil, fmt.Errorf("Len of Keybytes is not equal to 32 ")
+		return "", nil, fmt.Errorf("len of Keybytes is not equal to 32 ")
 	}
 	var keyBytesArray [32]byte
 	copy(keyBytesArray[:], priBytes[:32])
