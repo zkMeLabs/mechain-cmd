@@ -1,0 +1,2 @@
+rpcAddr = "http://localhost:26657"
+chainId = "mechain_5151-1"
