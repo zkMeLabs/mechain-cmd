@@ -1,0 +1,9 @@
+FROM ubuntu:latest
+
+WORKDIR /root
+
+COPY build/mechain-cmd /usr/bin/mechain-cmd
+COPY ./deployment ./deployment
+COPY ./deployment/testint .mechain-cmd
+
+CMD ["tail", "-f", "/dev/null"]

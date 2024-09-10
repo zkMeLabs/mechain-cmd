@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mechain-cmd
+  labels:
+    app: mechain-cmd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mechain-cmd
+  template:
+    metadata:
+      name: mechain-cmd
+      labels:
+        app: mechain-cmd
+    spec:
+      containers:
+        - name: mechain-cmd
+          image: kevin2025/mechain-cmd
+          imagePullPolicy: Always
+      restartPolicy: Always
