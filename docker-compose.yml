@@ -6,10 +6,10 @@ services:
       - mechain-network
     volumes:
       - "./deployment/dockerup/:/app:Z"
-    working_dir: "/workspace"
+    working_dir: "/app"
     stdin_open: true
     tty: true
-    command: /bin/sh
+    command: /bin/bash
 
 networks:
   mechain-network:

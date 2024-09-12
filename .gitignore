@@ -24,3 +24,5 @@
 # Log files
 logs/
 mechain-cmd
+deployment/dockerup/new_random_file
+deployment/dockerup/random_file
