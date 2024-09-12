@@ -32,3 +32,14 @@ build-docker:
 	$(DOCKER) tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:${COMMIT_HASH}
 
 .PHONY: build-docker
+
+###############################################################################
+###                        Docker Compose                                   ###
+###############################################################################
+start-dc:
+	docker compose up -d && docker attach mechain-cmd
+	
+stop-dc:
+	docker compose down --volumes
+
+.PHONY: build-dcf start-dc stop-dc
