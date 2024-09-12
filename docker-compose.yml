@@ -1,0 +1,16 @@
+services:
+  cmd:
+    container_name: mechain-cmd
+    image: "zkmelabs/mechain-cmd"
+    networks:
+      - mechain-network
+    volumes:
+      - "./deployment/dockerup/:/app:Z"
+    working_dir: "/app"
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+networks:
+  mechain-network:
+    external: true
