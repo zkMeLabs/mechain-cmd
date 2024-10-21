@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bnb-chain/greenfield-go-sdk/client"
-	"github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/urfave/cli/v2"
+	"github.com/zkMeLabs/mechain-go-sdk/client"
+	"github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 const iso8601DateFormat = "2006-01-02 15:04:05"
@@ -27,11 +27,11 @@ $ mechain-cmd version  `,
 }
 
 func showVersion(ctx *cli.Context) error {
-	fmt.Println("Greenfield Cmd Version:", Version)
+	fmt.Println("Mechain Cmd Version:", Version)
 	return nil
 }
 
-// NewClient returns a new greenfield client
+// NewClient returns a new mechain client
 func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 	var (
 		account    *types.Account

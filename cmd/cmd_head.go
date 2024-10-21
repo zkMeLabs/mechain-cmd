@@ -16,7 +16,7 @@ func cmdHeadObj() *cli.Command {
 		Usage:     "query object info",
 		ArgsUsage: "OBJECT-URL",
 		Description: `
-send headObject txn to chain and fetch object info on greenfield chain
+send headObject txn to chain and fetch object info on mechain chain
 Examples:
 $ mechain-cmd object head gnfd://bucket-name/object-name`,
 		Flags: []cli.Flag{
@@ -41,7 +41,7 @@ func cmdHeadBucket() *cli.Command {
 		Usage:     "query bucket info",
 		ArgsUsage: "BUCKET-URL",
 		Description: `
-send headBucket txn to chain and fetch bucket info on greenfield chain
+send headBucket txn to chain and fetch bucket info on mechain chain
 Examples:
 $ mechain-cmd bucket head gnfd://bucket-name`,
 		Flags: []cli.Flag{
@@ -66,7 +66,7 @@ func cmdHeadGroup() *cli.Command {
 		Usage:     "query group info",
 		ArgsUsage: "GROUP-NAME",
 		Description: `
-send headGroup txn to chain and fetch bucketInfo on greenfield chain
+send headGroup txn to chain and fetch bucketInfo on mechain chain
 Examples:
 $ mechain-cmd group head --groupOwner  group-name`,
 		Flags: []cli.Flag{

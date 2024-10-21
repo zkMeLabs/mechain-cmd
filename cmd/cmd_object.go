@@ -17,11 +17,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/urfave/cli/v2"
 
-	"github.com/bnb-chain/greenfield-go-sdk/client"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	gtypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	"github.com/zkMeLabs/mechain-go-sdk/client"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdPutObj return the command to finish uploading payload of the object

@@ -13,10 +13,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/urfave/cli/v2"
 
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	gtypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdCreateBucket create a new Bucket

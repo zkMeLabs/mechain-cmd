@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/urfave/cli/v2"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdBuyQuota buy the read quota of the bucket
@@ -83,7 +83,7 @@ func buyQuotaForBucket(ctx *cli.Context) error {
 	return nil
 }
 
-// getQuotaInfo query the quota price info of sp from greenfield chain
+// getQuotaInfo query the quota price info of sp from mechain chain
 func getQuotaInfo(ctx *cli.Context) error {
 	bucketName, err := getBucketNameByUrl(ctx)
 	if err != nil {

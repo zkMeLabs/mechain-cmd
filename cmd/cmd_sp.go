@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bnb-chain/greenfield-go-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sptypes "github.com/evmos/evmos/v12/x/sp/types"
 	"github.com/urfave/cli/v2"
+	"github.com/zkMeLabs/mechain-go-sdk/client"
 )
 
 func cmdListSP() *cli.Command {
@@ -127,7 +127,7 @@ func querySP(ctx *cli.Context) error {
 	return nil
 }
 
-// getQuotaPrice query the quota price info of sp from greenfield chain
+// getQuotaPrice query the quota price info of sp from mechain chain
 func getQuotaPrice(ctx *cli.Context) error {
 	if ctx.NArg() != 1 {
 		return errors.New("the args should be one , please set the sp endpoint")

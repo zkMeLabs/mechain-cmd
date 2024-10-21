@@ -11,10 +11,10 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	"github.com/urfave/cli/v2"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdImportAccount import the account by private key file
@@ -169,21 +169,21 @@ $ mechain-cmd bank transfer --toAddress 0x.. --amount 12345`,
 			&cli.StringFlag{
 				Name:  amountFlag,
 				Value: "",
-				Usage: "the amount to be sent, the unit is wei for BNB",
+				Usage: "the amount to be sent, the unit is wei for azkme",
 			},
 		},
 	}
 }
 
-// cmdBridge makes a transfer from Greenfield to BSC
+// cmdBridge makes a transfer from Mechain to BSC
 func cmdBridge() *cli.Command {
 	return &cli.Command{
 		Name:      "bridge",
 		Action:    Bridge,
-		Usage:     "transfer from greenfield to a BSC account",
+		Usage:     "transfer from mechain to a BSC account",
 		ArgsUsage: "",
 		Description: `
-Create a cross chain transfer from Greenfield to a BSC account
+Create a cross chain transfer from Mechain to a BSC account
 
 Examples:
 # Make a cross chain transfer to BSC
@@ -198,7 +198,7 @@ $ mechain-cmd bank bridge --toAddress 0x.. --amount 12345`,
 			&cli.StringFlag{
 				Name:     amountFlag,
 				Value:    "",
-				Usage:    "the amount of BNB to be sent",
+				Usage:    "the amount of azkme to be sent",
 				Required: true,
 			},
 		},
@@ -460,7 +460,7 @@ func Bridge(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	fmt.Printf("transfer out %s BNB to %s succ, txHash: %s\n", amountStr, toAddr, txResp.TxHash)
+	fmt.Printf("transfer out %s azkme to %s succ, txHash: %s\n", amountStr, toAddr, txResp.TxHash)
 	return nil
 }
 
@@ -492,7 +492,7 @@ func Transfer(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-	fmt.Printf("transfer %s BNB to address %s succ, txHash: %s\n", amountStr, toAddr, txHash)
+	fmt.Printf("transfer %s azkme to address %s succ, txHash: %s\n", amountStr, toAddr, txHash)
 	return nil
 }
 

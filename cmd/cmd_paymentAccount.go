@@ -108,7 +108,7 @@ func Deposit(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-	fmt.Printf("Deposit %s BNB to payment account %s succ, txHash=%s\n", amount.String(), toAddr, txHash)
+	fmt.Printf("Deposit %s azkme to payment account %s succ, txHash=%s\n", amount.String(), toAddr, txHash)
 	return nil
 }
 

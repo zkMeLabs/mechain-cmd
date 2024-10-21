@@ -26,11 +26,11 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
 
-	sdkutils "github.com/bnb-chain/greenfield-go-sdk/pkg/utils"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	permTypes "github.com/evmos/evmos/v12/x/permission/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	sdkutils "github.com/zkMeLabs/mechain-go-sdk/pkg/utils"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 const (
@@ -151,7 +151,7 @@ var (
 	TxnOptionWithSyncMode = types.TxOption{Mode: &SyncBroadcastMode}
 )
 
-// ClientOptions indicates the metadata to construct new greenfield client
+// ClientOptions indicates the metadata to construct new mechain client
 type ClientOptions struct {
 	// IsQueryCmd indicate whether the command is query command
 	IsQueryCmd bool
@@ -432,7 +432,7 @@ func getPassword(ctx *cli.Context, needNotice bool) (string, error) {
 	password := string(bytePassword)
 	fmt.Println()
 	if needNotice {
-		fmt.Println("- You must BACKUP your key file! Without the key, it's impossible to set transaction to greenfield!")
+		fmt.Println("- You must BACKUP your key file! Without the key, it's impossible to set transaction to mechain!")
 		fmt.Println("- You must REMEMBER your password! Without the password, it's impossible to decrypt the key!")
 	}
 	return password, nil
@@ -492,7 +492,7 @@ func parseConfigFile(filePath string) (*cmdConfig, error) {
 	return &config, nil
 }
 
-const configContent = "rpcAddr = \"https://greenfield-chain.bnbchain.org:443\"\nchainId = \"greenfield_1017-1\""
+const configContent = "rpcAddr = \"https://mechain-chain.org:443\"\nchainId = \"mechain_5151-1\""
 
 // loadConfig parse the default config file path
 func loadConfig(ctx *cli.Context) (*cmdConfig, error) {

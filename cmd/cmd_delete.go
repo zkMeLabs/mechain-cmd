@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bnb-chain/greenfield-go-sdk/client"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/urfave/cli/v2"
+	"github.com/zkMeLabs/mechain-go-sdk/client"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdDelBucket delete an existed Bucket, the bucket must be empty
@@ -18,7 +18,7 @@ func cmdDelBucket() *cli.Command {
 		Usage:     "delete an existed bucket",
 		ArgsUsage: "BUCKET-URL",
 		Description: `
-Send a deleteBucket txn to greenfield chain, the bucket must be empty before deleting
+Send a deleteBucket txn to mechain chain, the bucket must be empty before deleting
 
 Examples:
 # Delete an existed bucket called gnfd-bucket
@@ -34,7 +34,7 @@ func cmdDelObject() *cli.Command {
 		Usage:     "delete existed object",
 		ArgsUsage: "OBJECT-URL",
 		Description: `
-Send a deleteObject txn to greenfield chain
+Send a deleteObject txn to mechain chain
 
 Examples:
 # Delete an existed object called gnfd-object
@@ -57,7 +57,7 @@ func cmdDelGroup() *cli.Command {
 		Usage:     "delete an existed group",
 		ArgsUsage: "GROUP-NAME",
 		Description: `
-Send a deleteGroup txn to greenfield chain
+Send a deleteGroup txn to mechain chain
 
 Examples:
 # Delete an existed group
@@ -65,7 +65,7 @@ $ mechain-cmd group rm group-name`,
 	}
 }
 
-// deleteBucket send the deleteBucket msg to greenfield
+// deleteBucket send the deleteBucket msg to mechain
 func deleteBucket(ctx *cli.Context) error {
 	if ctx.NArg() != 1 {
 		return toCmdErr(fmt.Errorf("args number more than one"))
@@ -103,7 +103,7 @@ func deleteBucket(ctx *cli.Context) error {
 	return nil
 }
 
-// deleteObject send the deleteBucket msg to greenfield
+// deleteObject send the deleteBucket msg to mechain
 func deleteObject(ctx *cli.Context) error {
 	if ctx.NArg() != 1 {
 		return toCmdErr(fmt.Errorf("args number more than one"))
@@ -213,7 +213,7 @@ func deleteObjectAndWaitTxn(cli client.IClient, c context.Context, bucketName, o
 	fmt.Printf("delete: %s\n", objectName)
 }
 
-// deleteGroup send the deleteGroup msg to greenfield
+// deleteGroup send the deleteGroup msg to mechain
 func deleteGroup(ctx *cli.Context) error {
 	if ctx.NArg() != 1 {
 		return toCmdErr(fmt.Errorf("args number more than one"))

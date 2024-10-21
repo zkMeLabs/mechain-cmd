@@ -17,7 +17,7 @@ func cmdCalHash() *cli.Command {
 		Usage:     "compute the integrity hash of file",
 		ArgsUsage: "filePath",
 		Description: `
-Compute the integrity hash value of the file which use same algorithm of greenfield
+Compute the integrity hash value of the file which use same algorithm of mechain
 
 Examples:
 $ mechain-cmd object get-hash /home/test.text `,

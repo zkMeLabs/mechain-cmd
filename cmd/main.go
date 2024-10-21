@@ -37,13 +37,13 @@ func main() {
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:  "rpcAddr",
-				Usage: "greenfield chain client rpc address",
+				Usage: "mechain chain client rpc address",
 			},
 		),
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:  "chainId",
-				Usage: "greenfield chainId",
+				Usage: "mechain chainId",
 			},
 		),
 
@@ -71,7 +71,7 @@ func main() {
 
 	app := &cli.App{
 		Name:  "mechain-cmd",
-		Usage: "cmd tool for supporting making request to greenfield",
+		Usage: "cmd tool for supporting making request to mechain",
 		Flags: flags,
 		Commands: []*cli.Command{
 			{
@@ -127,7 +127,7 @@ func main() {
 
 			{
 				Name:  "bank",
-				Usage: "support the bank functions, including transfer in greenfield and query balance",
+				Usage: "support the bank functions, including transfer in mechain and query balance",
 				Subcommands: []*cli.Command{
 					cmdTransfer(),
 					cmdGetAccountBalance(),

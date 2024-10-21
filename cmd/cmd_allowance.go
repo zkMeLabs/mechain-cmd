@@ -34,7 +34,7 @@ $ mechain-cmd fee grant --grantee 0x... --allowance 10000000000000000 --expire 3
 			&cli.StringFlag{
 				Name:  allowanceFlag,
 				Value: "",
-				Usage: "the bnb in wei",
+				Usage: "the azkme in wei",
 			},
 			&cli.Uint64Flag{
 				Name:  expireTimeFlag,

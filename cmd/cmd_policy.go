@@ -8,13 +8,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bnb-chain/greenfield-go-sdk/client"
-	"github.com/bnb-chain/greenfield-go-sdk/pkg/utils"
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	gnfdTypes "github.com/evmos/evmos/v12/types"
 	permTypes "github.com/evmos/evmos/v12/x/permission/types"
 	"github.com/urfave/cli/v2"
+	"github.com/zkMeLabs/mechain-go-sdk/client"
+	"github.com/zkMeLabs/mechain-go-sdk/pkg/utils"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 type ResourceType int

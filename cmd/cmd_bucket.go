@@ -11,10 +11,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/urfave/cli/v2"
 
-	sdktypes "github.com/bnb-chain/greenfield-go-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	gtypes "github.com/evmos/evmos/v12/types"
 	storagetypes "github.com/evmos/evmos/v12/x/storage/types"
+	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
 // cmdCreateBucket create a new Bucket
@@ -373,7 +373,7 @@ func updateBucket(ctx *cli.Context) error {
 	return nil
 }
 
-// migrateBucket Get approval of migrating from SP, send the signed migrate bucket msg to greenfield chain and return the txn hash
+// migrateBucket Get approval of migrating from SP, send the signed migrate bucket msg to mechain chain and return the txn hash
 func migrateBucket(ctx *cli.Context) error {
 	bucketName, err := getBucketNameByUrl(ctx)
 	if err != nil {
