@@ -36,7 +36,7 @@ func cmdGetSP() *cli.Command {
 Get the storage provider details information, including status, address and so on.
 
 Examples:
-$ mechain-cmd sp head https://gnfd-testnet-sp-1.nodereal.io`,
+$ mechain-cmd sp head https://mechaind-testnet-sp-1.nodereal.io`,
 	}
 }
 
@@ -51,7 +51,7 @@ func cmdGetQuotaPrice() *cli.Command {
 Get the quota price and the storage price of the specific Storage Provider.
 
 Examples:
-$ mechain-cmd sp get-price https://gnfd-testnet-sp-1.nodereal.io`,
+$ mechain-cmd sp get-price https://mechaind-testnet-sp-1.nodereal.io`,
 	}
 }
 

@@ -37,10 +37,10 @@ The command need to pass the file path inorder to compute hash roots on client.
 Note that the  uploading with recursive flag only support folder.
 
 Examples:
-# create object and upload file to storage provider, the corresponding object is gnfd-object
-$ mechain-cmd object put file.txt gnfd://gnfd-bucket/gnfd-object,
+# create object and upload file to storage provider, the corresponding object is mechaind-object
+$ mechain-cmd object put file.txt mechaind://mechaind-bucket/mechaind-object,
 # upload the files inside the folders
-$ mechain-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName gnfd://bucket-name`,
+$ mechain-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName mechaind://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  secondarySPFlag,
@@ -105,7 +105,7 @@ Download a specific object from storage provider
 
 Examples:
 # download an object payload to file
-$ mechain-cmd object get gnfd://gnfd-bucket/gnfd-object  file.txt `,
+$ mechain-cmd object get mechaind://mechaind-bucket/mechaind-object  file.txt `,
 		Flags: []cli.Flag{
 			&cli.Int64Flag{
 				Name:  startOffsetFlag,
@@ -151,7 +151,7 @@ func cmdCancelObjects() *cli.Command {
 Cancel the created object 
 
 Examples:
-$ mechain-cmd object cancel  gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object cancel  mechaind://mechaind-bucket/mechaind-object`,
 	}
 }
 
@@ -166,7 +166,7 @@ func cmdListObjects() *cli.Command {
 List Objects of the bucket, including object name, object id, object status
 
 Examples:
-$ mechain-cmd object ls gnfd://gnfd-bucket`,
+$ mechain-cmd object ls mechaind://mechaind-bucket`,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  recursiveFlag,
@@ -189,8 +189,8 @@ Update the visibility of the object.
 The visibility value can be public-read, private or inherit.
 
 Examples:
-update visibility of the gnfd-object
-$ mechain-cmd object update --visibility=public-read  gnfd://gnfd-bucket/gnfd-object`,
+update visibility of the mechaind-object
+$ mechain-cmd object update --visibility=public-read  mechaind://mechaind-bucket/mechaind-object`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name: visibilityFlag,
@@ -216,7 +216,7 @@ The command is used to get the uploading progress info.
 you can use this command to view the progress information during the process of uploading a file to a Storage Provider.
 
 Examples:
-$ mechain-cmd object get-progress gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object get-progress mechaind://mechaind-bucket/mechaind-object`,
 	}
 }
 
@@ -275,7 +275,7 @@ func cmdSetTagForObject() *cli.Command {
 The command is used to set tag for a given existing object.
 
 Examples:
-$ mechain-cmd object setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' gnfd://gnfd-bucket/gnfd-object`,
+$ mechain-cmd object setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' mechaind://mechaind-bucket/mechaind-object`,
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -322,7 +322,6 @@ func setTagForObject(ctx *cli.Context) error {
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
 	if err != nil {
 		return toCmdErr(err)
 	}
