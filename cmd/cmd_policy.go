@@ -38,7 +38,7 @@ the resource url can be the follow types:
 if your need to set a group policy, you need set the owneraddress as your own account address.
 
 Examples:
-$ mechain-cmd policy put --groupId 111 --actions get,delete grn:o::mechaind-bucket/mechaind-object`,
+$ mechain-cmd policy put --groupId 111 --actions get,delete grn:o::mechain-bucket/mechain-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,
@@ -96,7 +96,7 @@ the resource url can be the follow types:
 3) grn:g:owneraddress:groupname, it indicates the group policy
 
 Examples:
-$ mechain-cmd policy rm --groupId 111  grn:o::mechaind-bucket/mechaind-object`,
+$ mechain-cmd policy rm --groupId 111  grn:o::mechain-bucket/mechain-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,
@@ -128,7 +128,7 @@ the resource url can be the follow types:
 3) grn:g:owneraddress:groupname, it indicates the group policy
 
 Examples:
-$ mechain-cmd policy ls --groupId 111  grn:o::mechaind-bucket/mechaind-object`,
+$ mechain-cmd policy ls --groupId 111  grn:o::mechain-bucket/mechain-object`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:  groupIDFlag,

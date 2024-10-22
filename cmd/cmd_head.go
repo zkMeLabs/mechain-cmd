@@ -18,7 +18,7 @@ func cmdHeadObj() *cli.Command {
 		Description: `
 send headObject txn to chain and fetch object info on mechain chain
 Examples:
-$ mechain-cmd object head mechaind://bucket-name/object-name`,
+$ mechain-cmd object head mechain://bucket-name/object-name`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name:    formatFlag,
@@ -43,7 +43,7 @@ func cmdHeadBucket() *cli.Command {
 		Description: `
 send headBucket txn to chain and fetch bucket info on mechain chain
 Examples:
-$ mechain-cmd bucket head mechaind://bucket-name`,
+$ mechain-cmd bucket head mechain://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name:    formatFlag,
