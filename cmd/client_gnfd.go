@@ -11,7 +11,10 @@ import (
 	"github.com/zkMeLabs/mechain-go-sdk/types"
 )
 
-const iso8601DateFormat = "2006-01-02 15:04:05"
+const (
+	iso8601DateFormat = "2006-01-02 15:04:05"
+	urlPrefix         = "mechaind://"
+)
 
 func cmdShowVersion() *cli.Command {
 	return &cli.Command{
@@ -46,7 +49,7 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 			return nil, err
 		}
 
-		account, err = types.NewAccountFromPrivateKey("gnfd-account", privateKey)
+		account, err = types.NewAccountFromPrivateKey("mechaind-account", privateKey)
 		if err != nil {
 			fmt.Println("new account err", err.Error())
 			return nil, err
@@ -74,8 +77,8 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 
 // ParseBucketAndObject parse the bucket-name and object-name from url
 func ParseBucketAndObject(urlPath string) (string, string, error) {
-	if strings.Contains(urlPath, "gnfd://") {
-		urlPath = urlPath[len("gnfd://"):]
+	if strings.Contains(urlPath, urlPrefix) {
+		urlPath = urlPath[len(urlPrefix):]
 	}
 
 	index := strings.Index(urlPath, "/")
@@ -89,8 +92,8 @@ func ParseBucketAndObject(urlPath string) (string, string, error) {
 
 // ParseBucketAndPrefix parse the bucket-name, if prefix exist, return the prefix as well
 func ParseBucketAndPrefix(urlPath string) (string, string, error) {
-	if strings.Contains(urlPath, "gnfd://") {
-		urlPath = urlPath[len("gnfd://"):]
+	if strings.Contains(urlPath, urlPrefix) {
+		urlPath = urlPath[len(urlPrefix):]
 	}
 
 	index := strings.Index(urlPath, "/")
@@ -104,8 +107,8 @@ func ParseBucketAndPrefix(urlPath string) (string, string, error) {
 
 // ParseBucket parse the bucket-name from url
 func ParseBucket(urlPath string) (bucketName string) {
-	if strings.Contains(urlPath, "gnfd://") {
-		urlPath = urlPath[len("gnfd://"):]
+	if strings.Contains(urlPath, urlPrefix) {
+		urlPath = urlPath[len(urlPrefix):]
 	}
 	splits := strings.SplitN(urlPath, "/", 1)
 

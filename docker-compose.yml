@@ -6,7 +6,7 @@ services:
       - mechain-network
     volumes:
       - "./deployment/dockerup/:/root/.mechain-cmd:Z"
-    working_dir: "/app"
+    working_dir: "/root/.mechain-cmd"
     stdin_open: true
     tty: true
     command: /bin/bash

@@ -21,7 +21,7 @@ Update the read quota metadata of the bucket, indicating the target quota of the
 The command need to set the target quota with --chargedQuota 
 
 Examples:
-$ mechain-cmd payment buy-quota  --chargedQuota 1000000  gnfd://bucket-name`,
+$ mechain-cmd payment buy-quota  --chargedQuota 1000000  mechaind://bucket-name`,
 		Flags: []cli.Flag{
 			&cli.Uint64Flag{
 				Name:     chargeQuotaFlag,
@@ -42,7 +42,7 @@ func cmdGetQuotaInfo() *cli.Command {
 Get charged quota, free quota and consumed quota info from storage provider 
 
 Examples:
-$ gnfd -c config.toml payment quota-info  gnfd://bucket-name`,
+$ mechaind -c config.toml payment quota-info  mechaind://bucket-name`,
 	}
 }
 
