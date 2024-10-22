@@ -376,7 +376,7 @@ func createAccount(ctx *cli.Context) error {
 		encryptContent []byte
 	)
 
-	account, privateKey, err := sdktypes.NewAccount("mechaind-account")
+	account, privateKey, err := sdktypes.NewAccount("mechain-account")
 	if err != nil {
 		return toCmdErr(err)
 	}

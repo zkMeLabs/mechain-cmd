@@ -30,8 +30,8 @@ The bucket name should unique and the default visibility is private.
 The command need to set the primary SP address with --primarySP.
 
 Examples:
-# Create a new bucket called mechaind-bucket, visibility is public-read
-$ mechain-cmd bucket create --visibility=public-read  --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' mechaind://mechaind-bucket`,
+# Create a new bucket called mechain-bucket, visibility is public-read
+$ mechain-cmd bucket create --visibility=public-read  --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' mechain://mechain-bucket`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  primarySPFlag,
@@ -78,8 +78,8 @@ The visibility value can be public-read, private or inherit.
 You can update only one item or multiple items at the same time.
 
 Examples:
-update visibility and the payment address of the mechaind-bucket
-$ mechain-cmd bucket update --visibility=public-read --paymentAddress xx  mechaind://mechaind-bucket`,
+update visibility and the payment address of the mechain-bucket
+$ mechain-cmd bucket update --visibility=public-read --paymentAddress xx  mechain://mechain-bucket`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  paymentFlag,
@@ -114,7 +114,7 @@ Get approval of migrating from SP, send the signed migrate bucket msg to mechain
 
 Examples:
 migrate the bucket to dest PrimarySP
-$ mechain-cmd bucket migrate dstPrimarySPID mechaind://mechaind-bucket`,
+$ mechain-cmd bucket migrate dstPrimarySPID mechain://mechain-bucket`,
 		Flags: []cli.Flag{
 			&cli.UintFlag{
 				Name:  dstPrimarySPIDFlag,
@@ -189,7 +189,7 @@ func cmdSetTagForBucket() *cli.Command {
 The command is used to set tag for a given existing bucket.
 
 Examples:
-$ mechain-cmd bucket setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  mechaind://mechaind-bucket`,
+$ mechain-cmd bucket setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]'  mechain://mechain-bucket`,
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{

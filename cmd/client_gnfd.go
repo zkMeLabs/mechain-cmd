@@ -13,7 +13,7 @@ import (
 
 const (
 	iso8601DateFormat = "2006-01-02 15:04:05"
-	urlPrefix         = "mechaind://"
+	urlPrefix         = "mechain://"
 )
 
 func cmdShowVersion() *cli.Command {
@@ -49,7 +49,7 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 			return nil, err
 		}
 
-		account, err = types.NewAccountFromPrivateKey("mechaind-account", privateKey)
+		account, err = types.NewAccountFromPrivateKey("mechain-account", privateKey)
 		if err != nil {
 			fmt.Println("new account err", err.Error())
 			return nil, err

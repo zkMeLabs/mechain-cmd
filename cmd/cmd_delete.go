@@ -21,8 +21,8 @@ func cmdDelBucket() *cli.Command {
 Send a deleteBucket txn to mechain chain, the bucket must be empty before deleting
 
 Examples:
-# Delete an existed bucket called mechaind-bucket
-$ mechain-cmd bucket rm mechaind://mechaind-bucket/mechaind-object`,
+# Delete an existed bucket called mechain-bucket
+$ mechain-cmd bucket rm mechain://mechain-bucket/mechain-object`,
 	}
 }
 
@@ -37,8 +37,8 @@ func cmdDelObject() *cli.Command {
 Send a deleteObject txn to mechain chain
 
 Examples:
-# Delete an existed object called mechaind-object
-$ mechain-cmd object rm mechaind://mechaind-bucket/mechaind-object`,
+# Delete an existed object called mechain-object
+$ mechain-cmd object rm mechain://mechain-bucket/mechain-object`,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  recursiveFlag,
