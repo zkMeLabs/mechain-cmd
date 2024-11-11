@@ -56,15 +56,15 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 		}
 	}
 
-	rpcAddr, chainId, host, err := getConfig(ctx)
+	rpcAddr, chainId, host, evmRpcAddress, err := getConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	if host != "" {
-		cli, err = client.New(chainId, rpcAddr, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	} else {
-		cli, err = client.New(chainId, rpcAddr, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	}
 
 	if err != nil {

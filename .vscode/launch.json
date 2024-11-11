@@ -5,6 +5,37 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "sp ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "sp",
+        "ls"
+      ]
+    },
+    {
+      "name": "sp head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "sp",
+        "head",
+        "http://127.0.0.1:9033"
+      ]
+    },
+    {
       "name": "bucket ls",
       "type": "go",
       "request": "launch",

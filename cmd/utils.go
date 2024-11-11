@@ -101,12 +101,13 @@ const (
 	DefaultAccountPath = "account/defaultKey"
 	DefaultKeyDir      = "keystore"
 
-	rpcAddrConfigField = "rpcAddr"
-	chainIdConfigField = "chainId"
-	hostConfigField    = "host"
-	groupNameFlag      = "groupName"
-	bucketNameFlag     = "bucketName"
-	objectNameFlag     = "objectName"
+	rpcAddrConfigField    = "rpcAddr"
+	chainIdConfigField    = "chainId"
+	hostConfigField       = "host"
+	groupNameFlag         = "groupName"
+	bucketNameFlag        = "bucketName"
+	objectNameFlag        = "objectName"
+	evmRpcAddrConfigField = "evmRpcAddr"
 
 	// resumable download & upload
 	partSizeFlag  = "partSize"
@@ -478,9 +479,10 @@ OUTER:
 }
 
 type cmdConfig struct {
-	RpcAddr string `toml:"rpcAddr"`
-	ChainId string `toml:"chainId"`
-	Host    string `toml:"host"`
+	RpcAddr    string `toml:"rpcAddr"`
+	EvmRpcAddr string `toml:"evmRpcAddr"`
+	ChainId    string `toml:"chainId"`
+	Host       string `toml:"host"`
 }
 
 // parseConfigFile decode the config file of TOML format
@@ -526,12 +528,13 @@ func loadConfig(ctx *cli.Context) (*cmdConfig, error) {
 	return content, nil
 }
 
-// getConfig parse the config of the client, return rpc address, chainId and host
-func getConfig(ctx *cli.Context) (string, string, string, error) {
+// getConfig parse the config of the client, return rpc address, chainId, host, and evm rpc address
+func getConfig(ctx *cli.Context) (string, string, string, string, error) {
 	rpcAddr := ctx.String(rpcAddrConfigField)
+	evmRpcAddr := ctx.String(evmRpcAddrConfigField)
 	chainId := ctx.String(chainIdConfigField)
 	if rpcAddr != "" && chainId != "" {
-		return rpcAddr, chainId, ctx.String(hostConfigField), nil
+		return rpcAddr, chainId, ctx.String(hostConfigField), evmRpcAddr, nil
 	}
 
 	configFile := ctx.String("config")
@@ -541,22 +544,22 @@ func getConfig(ctx *cli.Context) (string, string, string, error) {
 		// if user has set config file, parse the file
 		config, err = parseConfigFile(configFile)
 		if err != nil {
-			return "", "", "", err
+			return "", "", "", "", err
 		}
 	} else {
 		// if file exist in config default path, read default file.
 		// else generate the default file for user in the default path
 		config, err = loadConfig(ctx)
 		if err != nil {
-			return "", "", "", err
+			return "", "", "", "", err
 		}
 	}
 
-	if config.RpcAddr == "" || config.ChainId == "" {
-		return "", "", "", fmt.Errorf("failed to parse rpc address or chain id , please set it in the config file")
+	if config.RpcAddr == "" || config.ChainId == "" || config.EvmRpcAddr == "" {
+		return "", "", "", "", fmt.Errorf("failed to parse rpc address or chain id , please set it in the config file")
 	}
 
-	return config.RpcAddr, config.ChainId, config.Host, nil
+	return config.RpcAddr, config.ChainId, config.Host, config.EvmRpcAddr, nil
 }
 
 func loadKeyStoreFile(ctx *cli.Context) ([]byte, string, error) {
