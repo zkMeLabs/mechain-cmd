@@ -14,7 +14,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.29.1
 	github.com/urfave/cli/v2 v2.25.7
-	github.com/zkMeLabs/mechain-go-sdk v0.0.0-20241021071149-d07f885cd76b
+	github.com/zkMeLabs/mechain-go-sdk v0.2.0-alpha.1.0.20241111064108-2f59b605770a
 	golang.org/x/term v0.22.0
 )
 
@@ -188,5 +188,4 @@ replace (
 	github.com/evmos/evmos/v12 => github.com/zkMeLabs/mechain/v12 v12.2.0-alpha.1.0.20241111060628-141e1eff76f5
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-	github.com/zkMeLabs/mechain-go-sdk => ../mechain-go-sdk
 )

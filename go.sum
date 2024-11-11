@@ -688,6 +688,8 @@ github.com/zkMeLabs/mechain-cosmos-sdk/math v0.0.0-20241017101002-ab985b5a45ec h
 github.com/zkMeLabs/mechain-cosmos-sdk/math v0.0.0-20241017101002-ab985b5a45ec/go.mod h1:An0MllWJY6PxibUpnwGk8jOm+a/qIxlKmL5Zyp9NnaM=
 github.com/zkMeLabs/mechain-cosmos-sdk/simapp v0.0.0-20241017101002-ab985b5a45ec h1:UQVd8BBgYtT2H6z8ATKIOEwKeKBUIP+diTwGCZ7FQ5c=
 github.com/zkMeLabs/mechain-cosmos-sdk/simapp v0.0.0-20241017101002-ab985b5a45ec/go.mod h1:CqBF0Q4ou3oRNVl9ZHylPV5NlKTvp8kc8VW7EfqM+jI=
+github.com/zkMeLabs/mechain-go-sdk v0.2.0-alpha.1.0.20241111064108-2f59b605770a h1:CVa4GJQOapauPlbK8YdH40Rtan9ahVj/DO+Df9fcE6s=
+github.com/zkMeLabs/mechain-go-sdk v0.2.0-alpha.1.0.20241111064108-2f59b605770a/go.mod h1:od9+RJmR5TIjrEW6mAqCGn22c0PYh2abPCA96gJuGkg=
 github.com/zkMeLabs/mechain-iavl v0.20.1 h1:2dreayjVdDHlDsnMTUZHEjLcBXwlsfZTz4FyvxF+uVo=
 github.com/zkMeLabs/mechain-iavl v0.20.1/go.mod h1:oLksTs8dfh7DYIKBro7hbRQ+ewls7ghJ27pIXlbEXyI=
 github.com/zkMeLabs/mechain-ibc-go/v7 v7.2.0-mocks-mechain.2 h1:XvtTZ7NRRZvIgP0pfDJS5h2xG4pWRjIGeC0xkQMKfFw=
