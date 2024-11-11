@@ -692,6 +692,8 @@ github.com/zkMeLabs/mechain-iavl v0.20.1 h1:2dreayjVdDHlDsnMTUZHEjLcBXwlsfZTz4Fy
 github.com/zkMeLabs/mechain-iavl v0.20.1/go.mod h1:oLksTs8dfh7DYIKBro7hbRQ+ewls7ghJ27pIXlbEXyI=
 github.com/zkMeLabs/mechain-ibc-go/v7 v7.2.0-mocks-mechain.2 h1:XvtTZ7NRRZvIgP0pfDJS5h2xG4pWRjIGeC0xkQMKfFw=
 github.com/zkMeLabs/mechain-ibc-go/v7 v7.2.0-mocks-mechain.2/go.mod h1:GZolMa+aTkPNCNJJNQbQ+C8P/vjs7FHfEIX9IgixjDc=
+github.com/zkMeLabs/mechain/v12 v12.2.0-alpha.1.0.20241111060628-141e1eff76f5 h1:DJvvWLP+/f4TNaTye3FF/icuw66tjGwqMMNvUj9bWIg=
+github.com/zkMeLabs/mechain/v12 v12.2.0-alpha.1.0.20241111060628-141e1eff76f5/go.mod h1:JLZ00roehpWypVMO72rfJi3NykStnSyZc9mpvDwERi8=
 github.com/zondax/hid v0.9.1 h1:gQe66rtmyZ8VeGFcOpbuH3r7erYtNEAezCAYu8LdkJo=
 github.com/zondax/hid v0.9.1/go.mod h1:l5wttcP0jwtdLjqjMMWFVEE7d1zO0jvSPA9OPZxWpEM=
 github.com/zondax/ledger-go v0.14.1 h1:Pip65OOl4iJ84WTpA4BKChvOufMhhbxED3BaihoZN4c=
