@@ -281,11 +281,13 @@ func setTagForGroup(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -558,7 +560,6 @@ func listGroup(ctx *cli.Context) error {
 	for {
 		groupList, err := client.ListGroupsByOwner(c,
 			sdktypes.GroupsOwnerPaginationOptions{Limit: maxListMemberNum, Owner: groupOwner, StartAfter: initStartKey})
-
 		if err != nil {
 			return toCmdErr(err)
 		}

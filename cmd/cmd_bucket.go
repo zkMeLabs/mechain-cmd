@@ -227,9 +227,13 @@ func setTagForBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
