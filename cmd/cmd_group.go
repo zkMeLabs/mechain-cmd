@@ -404,7 +404,10 @@ func updateGroupMember(ctx *cli.Context) error {
 	if expireTimestamp != 0 && expireTimestamp < time.Now().Unix() {
 		return toCmdErr(errors.New("expire stamp should be more than" + strconv.Itoa(int(time.Now().Unix()))))
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	var txnHash string
 	if expireTimestamp > 0 && len(addGroupMembers) > 0 {
 		addMemberNum := len(addGroupMembers)
@@ -414,10 +417,10 @@ func updateGroupMember(ctx *cli.Context) error {
 			expireTimeList[i] = &t
 		}
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList})
+			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList}, privateKey)
 	} else if expireTimestamp == 0 {
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{})
+			sdktypes.UpdateGroupMemberOption{}, privateKey)
 	}
 
 	if err != nil {

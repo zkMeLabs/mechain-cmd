@@ -5,6 +5,89 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "group delete",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "rm",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group ls member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "ls-member",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group add member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "update",
+        "--addMembers",
+        "0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF80,0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF81",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "ls"
+      ]
+    },
+    {
+      "name": "group create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "create",
+        "--tags",
+        "[{\"key\":\"key1\",\"value\":\"value1\"}]",
+        "mechain"
+      ]
+    },
+    {
       "name": "object delete",
       "type": "go",
       "request": "launch",
