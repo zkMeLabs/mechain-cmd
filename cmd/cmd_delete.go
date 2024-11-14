@@ -87,8 +87,11 @@ func deleteBucket(ctx *cli.Context) error {
 	if err != nil {
 		fmt.Printf("bucket %s not exist or already deleted\n", bucketName)
 	}
-
-	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode})
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		fmt.Println("delete bucket error:", err.Error())
 		return nil
@@ -140,7 +143,10 @@ func deleteObject(ctx *cli.Context) error {
 
 	c, cancelDelObject := context.WithCancel(globalContext)
 	defer cancelDelObject()
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	if supportRecursive {
 		if !deleteAll {
 			// if it is a folder and set the --recursive flag , list all the objects and delete them one by one
@@ -148,23 +154,23 @@ func deleteObject(ctx *cli.Context) error {
 			if !strings.HasSuffix(prefixName, "/") {
 				prefixName = objectName + "/"
 			}
-			err = deleteObjectByPage(client, c, bucketName, prefixName)
+			err = deleteObjectByPage(client, c, bucketName, prefixName, privateKey)
 		} else {
 			// list all the objects in the bucket and delete them
-			err = deleteObjectByPage(client, c, bucketName, prefixName)
+			err = deleteObjectByPage(client, c, bucketName, prefixName, privateKey)
 		}
 		if err != nil {
 			return toCmdErr(err)
 		}
 
 	} else {
-		deleteObjectAndWaitTxn(client, c, bucketName, objectName)
+		deleteObjectAndWaitTxn(client, c, bucketName, objectName, privateKey)
 	}
 
 	return nil
 }
 
-func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefixName string) error {
+func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefixName, privateKey string) error {
 	var (
 		listResult        sdktypes.ListObjectsResult
 		continuationToken string
@@ -185,7 +191,7 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 		// TODO use one txn to broadcast multi delete object messages
 		for _, object := range listResult.Objects {
 			// no need to return err if some objects delete failed
-			deleteObjectAndWaitTxn(cli, c, bucketName, object.ObjectInfo.ObjectName)
+			deleteObjectAndWaitTxn(cli, c, bucketName, object.ObjectInfo.ObjectName, privateKey)
 		}
 
 		if !listResult.IsTruncated {
@@ -197,10 +203,10 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 	return nil
 }
 
-func deleteObjectAndWaitTxn(cli client.IClient, c context.Context, bucketName, objectName string) {
-	txnHash, err := cli.DeleteObject(c, bucketName, objectName, sdktypes.DeleteObjectOption{TxOpts: &TxnOptionWithSyncMode})
+func deleteObjectAndWaitTxn(cli client.IClient, c context.Context, bucketName, objectName, privateKey string) {
+	txnHash, err := cli.DeleteObject(c, bucketName, objectName, sdktypes.DeleteObjectOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
-		fmt.Printf("failed to delele object %s err:%v\n", objectName, err)
+		fmt.Printf("failed to delete object %s err:%v\n", objectName, err)
 		return
 	}
 
@@ -230,8 +236,11 @@ func deleteGroup(ctx *cli.Context) error {
 
 	c, cancelDelGroup := context.WithCancel(globalContext)
 	defer cancelDelGroup()
-
-	txnHash, err := client.DeleteGroup(c, groupName, sdktypes.DeleteGroupOption{TxOpts: &TxnOptionWithSyncMode})
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.DeleteGroup(c, groupName, sdktypes.DeleteGroupOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}

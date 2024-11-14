@@ -227,9 +227,13 @@ func setTagForBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -295,9 +299,12 @@ func createBucket(ctx *cli.Context) error {
 			return toCmdErr(err)
 		}
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	opts.TxOpts = &types.TxOption{Mode: &SyncBroadcastMode}
-	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts)
+	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -349,8 +356,11 @@ func updateBucket(ctx *cli.Context) error {
 	}
 
 	opts.TxOpts = &TxnOptionWithSyncMode
-
-	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts)
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts, privateKey)
 	if err != nil {
 		fmt.Println("update bucket error:", err.Error())
 		return nil

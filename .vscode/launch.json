@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "sp ls",
+      "name": "group delete",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -15,12 +15,62 @@
         "${workspaceFolder}/deployment/localup",
         "--passwordfile",
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
-        "sp",
+        "group",
+        "rm",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group ls member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "ls-member",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group add member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "update",
+        "--addMembers",
+        "0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF80,0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF81",
+        "mechain"
+      ]
+    },
+    {
+      "name": "group ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
         "ls"
       ]
     },
     {
-      "name": "sp head",
+      "name": "group create",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -30,9 +80,114 @@
         "${workspaceFolder}/deployment/localup",
         "--passwordfile",
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
-        "sp",
+        "group",
+        "create",
+        "--tags",
+        "[{\"key\":\"key1\",\"value\":\"value1\"}]",
+        "mechain"
+      ]
+    },
+    {
+      "name": "object delete",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "rm",
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "object head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
         "head",
-        "http://127.0.0.1:9033"
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "ojbect set tag",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "setTag",
+        "--tags",
+        "[{\"key\":\"key1\",\"value\":\"value2\"}]",
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "object create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "put",
+        "--contentType",
+        "\"application/octet-stream\"",
+        "${workspaceFolder}/go.mod",
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "bucket head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "head",
+        "mechain://mechain"
+      ]
+    },
+    {
+      "name": "bucket update",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "update",
+        "--visibility",
+        "public-read",
+        "mechain://mechain"
       ]
     },
     {
@@ -63,11 +218,11 @@
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
         "bucket",
         "create",
-        "mechain://mechain"
+        "mechain://mechain5"
       ]
     },
     {
-      "name": "object create",
+      "name": "sp head",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -77,16 +232,13 @@
         "${workspaceFolder}/deployment/localup",
         "--passwordfile",
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
-        "object",
-        "put",
-        "--contentType",
-        "\"application/octet-stream\"",
-        "${workspaceFolder}/go.mod",
-        "mechain://mechain/go.mod"
+        "sp",
+        "head",
+        "http://127.0.0.1:9033"
       ]
     },
     {
-      "name": "set tag",
+      "name": "sp ls",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -96,11 +248,8 @@
         "${workspaceFolder}/deployment/localup",
         "--passwordfile",
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
-        "object",
-        "setTag",
-        "--tags",
-        "[{\"key\":\"key1\",\"value\":\"value1\"}]",
-        "mechain://mechain/go.mod"
+        "sp",
+        "ls"
       ]
     },
     {

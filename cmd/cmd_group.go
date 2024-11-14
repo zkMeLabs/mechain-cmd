@@ -281,11 +281,13 @@ func setTagForGroup(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
-
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -325,8 +327,11 @@ func createGroup(ctx *cli.Context) error {
 
 	c, cancelCreateGroup := context.WithCancel(globalContext)
 	defer cancelCreateGroup()
-
-	txnHash, err := client.CreateGroup(c, groupName, opts)
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.CreateGroup(c, groupName, opts, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -399,7 +404,10 @@ func updateGroupMember(ctx *cli.Context) error {
 	if expireTimestamp != 0 && expireTimestamp < time.Now().Unix() {
 		return toCmdErr(errors.New("expire stamp should be more than" + strconv.Itoa(int(time.Now().Unix()))))
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	var txnHash string
 	if expireTimestamp > 0 && len(addGroupMembers) > 0 {
 		addMemberNum := len(addGroupMembers)
@@ -409,10 +417,10 @@ func updateGroupMember(ctx *cli.Context) error {
 			expireTimeList[i] = &t
 		}
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList})
+			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList}, privateKey)
 	} else if expireTimestamp == 0 {
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{})
+			sdktypes.UpdateGroupMemberOption{}, privateKey)
 	}
 
 	if err != nil {
@@ -558,7 +566,6 @@ func listGroup(ctx *cli.Context) error {
 	for {
 		groupList, err := client.ListGroupsByOwner(c,
 			sdktypes.GroupsOwnerPaginationOptions{Limit: maxListMemberNum, Owner: groupOwner, StartAfter: initStartKey})
-
 		if err != nil {
 			return toCmdErr(err)
 		}

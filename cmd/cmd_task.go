@@ -117,7 +117,11 @@ func retryTask(ctx *cli.Context) error {
 	fmt.Printf("task: %s\n", content.TaskID)
 	fmt.Printf("folder name: %s\n", content.FolderName)
 	fmt.Println("retrying...")
-	return uploadFolderByTask(ctx, homeDir, gnfdClient, content)
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	return uploadFolderByTask(ctx, homeDir, gnfdClient, content, privateKey)
 }
 
 func getTaskState(ctx *cli.Context) (*TaskState, error) {
