@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "bucket ls",
+      "name": "bucket update",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -16,7 +16,10 @@
         "--passwordfile",
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
         "bucket",
-        "ls"
+        "update",
+        "--visibility",
+        "public-read",
+        "mechain://mechain"
       ]
     },
     {

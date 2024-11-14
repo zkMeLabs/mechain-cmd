@@ -352,8 +352,11 @@ func updateBucket(ctx *cli.Context) error {
 	}
 
 	opts.TxOpts = &TxnOptionWithSyncMode
-
-	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts)
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts, privateKey)
 	if err != nil {
 		fmt.Println("update bucket error:", err.Error())
 		return nil
