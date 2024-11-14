@@ -87,8 +87,11 @@ func deleteBucket(ctx *cli.Context) error {
 	if err != nil {
 		fmt.Printf("bucket %s not exist or already deleted\n", bucketName)
 	}
-
-	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode})
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		fmt.Println("delete bucket error:", err.Error())
 		return nil
