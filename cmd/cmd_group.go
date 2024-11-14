@@ -327,8 +327,11 @@ func createGroup(ctx *cli.Context) error {
 
 	c, cancelCreateGroup := context.WithCancel(globalContext)
 	defer cancelCreateGroup()
-
-	txnHash, err := client.CreateGroup(c, groupName, opts)
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.CreateGroup(c, groupName, opts, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}

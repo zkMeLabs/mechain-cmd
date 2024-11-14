@@ -236,8 +236,11 @@ func deleteGroup(ctx *cli.Context) error {
 
 	c, cancelDelGroup := context.WithCancel(globalContext)
 	defer cancelDelGroup()
-
-	txnHash, err := client.DeleteGroup(c, groupName, sdktypes.DeleteGroupOption{TxOpts: &TxnOptionWithSyncMode})
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
+	txnHash, err := client.DeleteGroup(c, groupName, sdktypes.DeleteGroupOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
