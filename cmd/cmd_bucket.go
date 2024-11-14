@@ -295,9 +295,12 @@ func createBucket(ctx *cli.Context) error {
 			return toCmdErr(err)
 		}
 	}
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	opts.TxOpts = &types.TxOption{Mode: &SyncBroadcastMode}
-	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts)
+	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts, privateKey)
 	if err != nil {
 		return toCmdErr(err)
 	}
