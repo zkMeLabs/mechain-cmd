@@ -354,7 +354,10 @@ func putObject(ctx *cli.Context) error {
 	}
 
 	supportRecursive := ctx.Bool(recursiveFlag)
-
+	privateKey, _, err := parseKeystore(ctx)
+	if err != nil {
+		return err
+	}
 	if ctx.NArg() == 1 {
 		// upload an empty folder
 		urlInfo = ctx.Args().Get(0)
@@ -368,7 +371,7 @@ func putObject(ctx *cli.Context) error {
 			return toCmdErr(errors.New("no file path to upload, if you need create a folder, the folder name should be end with /"))
 		}
 
-		if err = uploadFile(bucketName, objectName, filePath, urlInfo, ctx, gnfdClient, isUploadSingleFolder, true, 0); err != nil {
+		if err = uploadFile(bucketName, objectName, filePath, urlInfo, ctx, gnfdClient, isUploadSingleFolder, true, 0, privateKey); err != nil {
 			return toCmdErr(err)
 		}
 
@@ -376,7 +379,7 @@ func putObject(ctx *cli.Context) error {
 		// upload files in folder in a recursive way
 		if supportRecursive {
 			urlInfo = ctx.Args().Get(1)
-			if err = uploadFolder(urlInfo, ctx, gnfdClient); err != nil {
+			if err = uploadFolder(urlInfo, ctx, gnfdClient, privateKey); err != nil {
 				return toCmdErr(err)
 			}
 			return nil
@@ -409,7 +412,7 @@ func putObject(ctx *cli.Context) error {
 					return toCmdErr(err)
 				}
 
-				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, gnfdClient, false, true, objectSize); err != nil {
+				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
 					fmt.Println("upload object:", objectName, "err", err)
 				}
 				fmt.Println()
@@ -430,7 +433,7 @@ func putObject(ctx *cli.Context) error {
 				// if the object name has not been set, set the file name as object name
 				objectName = filepath.Base(filePathList[0])
 			}
-			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, ctx, gnfdClient, false, true, objectSize); err != nil {
+			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
 				return toCmdErr(err)
 			}
 		}
@@ -441,7 +444,7 @@ func putObject(ctx *cli.Context) error {
 
 // uploadFolder upload folder and the files inside to bucket in a recursive way
 func uploadFolder(urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient,
+	gnfdClient client.IClient, privateKey string,
 ) error {
 	// upload folder with recursive flag
 	bucketName := ParseBucket(urlInfo)
@@ -571,10 +574,10 @@ func uploadFolder(urlInfo string, ctx *cli.Context,
 		return err
 	}
 
-	return uploadFolderByTask(ctx, homeDir, gnfdClient, taskState)
+	return uploadFolderByTask(ctx, homeDir, gnfdClient, taskState, privateKey)
 }
 
-func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.IClient, taskState *TaskState) error {
+func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.IClient, taskState *TaskState, privKey string) error {
 	signalCtx, cancel := context.WithCancel(ctx.Context)
 	go stateSync(signalCtx, homeDir, taskState)
 	sealSignal := make(chan int)
@@ -586,7 +589,7 @@ func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.ICli
 			continue
 		}
 
-		err := uploadFileByTask(object.BucketName, object.ObjectName, object.FilePath, taskState.Flag, gnfdClient, object.UploadSingleFolder, object.ObjectSize)
+		err := uploadFileByTask(object.BucketName, object.ObjectName, object.FilePath, taskState.Flag, gnfdClient, object.UploadSingleFolder, object.ObjectSize, privKey)
 		if err != nil {
 			taskState.UpdateObjectState(index, TaskObjectStatusFailed, err.Error())
 			fmt.Printf("\r%s", fmt.Sprintf("%s %s %s", TaskObjectStatusFailed, object.ObjectName, err.Error()))
@@ -664,7 +667,7 @@ func stateSync(ctx context.Context, homeDir string, state *TaskState) {
 }
 
 func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64,
+	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64, privKey string,
 ) error {
 	var file *os.File
 	contentType := ctx.String(contentTypeFlag)
@@ -721,7 +724,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	// if err==nil, object exist on chain, no need to createObject
 	if err != nil {
 		if uploadSingleFolder {
-			txnHash, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts)
+			txnHash, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts, privKey)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -732,7 +735,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 				return err
 			}
 			defer file.Close()
-			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts)
+			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -828,7 +831,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 }
 
 func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag UploadFlag,
-	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64,
+	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64, privKey string,
 ) error {
 	var file *os.File
 
@@ -871,7 +874,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 	// if err==nil, object exist on chain, no need to createObject
 	if err != nil {
 		if uploadSingleFolder {
-			_, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts)
+			_, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts, privKey)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -882,7 +885,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 				return err
 			}
 			defer file.Close()
-			_, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts)
+			_, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
 			if err != nil {
 				return toCmdErr(err)
 			}

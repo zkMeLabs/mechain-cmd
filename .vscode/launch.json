@@ -81,7 +81,7 @@
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
         "bucket",
         "create",
-        "mechain://mechain"
+        "mechain://mechain5"
       ]
     },
     {
@@ -100,7 +100,7 @@
         "--contentType",
         "\"application/octet-stream\"",
         "${workspaceFolder}/go.mod",
-        "mechain://mechain/go.mod"
+        "mechain://mechain5/go.mod"
       ]
     },
     {
