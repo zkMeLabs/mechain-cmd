@@ -104,6 +104,22 @@
       ]
     },
     {
+      "name": "object get",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "get",
+        "mechain://mechain/random_file"
+      ]
+    },
+    {
       "name": "object head",
       "type": "go",
       "request": "launch",

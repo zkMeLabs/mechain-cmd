@@ -742,11 +742,15 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 			if err != nil {
 				return toCmdErr(err)
 			}
+			if err = waitTxnStatus(gnfdClient, c, txnHash, "createObject"); err != nil {
+				return toCmdErr(err)
+			}
 		}
 		if printTxnHash {
 			fmt.Printf("object %s created on chain \n", objectName)
 			fmt.Println("transaction hash: ", txnHash)
 		}
+
 	} else {
 		fmt.Printf("object %s already exist \n", objectName)
 	}
