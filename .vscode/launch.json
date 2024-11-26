@@ -5,6 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "object fold create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "put",
+        "--recursive",
+        "--contentType",
+        "\"application/octet-stream\"",
+        "${workspaceFolder}/upload",
+        "mechain://mechain"
+      ]
+    },
+    {
       "name": "group delete",
       "type": "go",
       "request": "launch",

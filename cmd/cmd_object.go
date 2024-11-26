@@ -892,8 +892,11 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 				return err
 			}
 			defer file.Close()
-			_, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
+			txnHash, err := gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
 			if err != nil {
+				return toCmdErr(err)
+			}
+			if err = waitTxnStatus(gnfdClient, c, txnHash, "createObject"); err != nil {
 				return toCmdErr(err)
 			}
 		}
