@@ -110,17 +110,13 @@ func retryTask(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-	gnfdClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	gnfdClient, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return err
 	}
 	fmt.Printf("task: %s\n", content.TaskID)
 	fmt.Printf("folder name: %s\n", content.FolderName)
 	fmt.Println("retrying...")
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
 	return uploadFolderByTask(ctx, homeDir, gnfdClient, content, privateKey)
 }
 
