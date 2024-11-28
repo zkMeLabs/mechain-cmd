@@ -299,7 +299,7 @@ func setTagForObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -318,10 +318,7 @@ func setTagForObject(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
+
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
 	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
@@ -351,16 +348,12 @@ func putObject(ctx *cli.Context) error {
 		urlInfo                          string
 	)
 
-	gnfdClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	gnfdClient, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return err
 	}
 
 	supportRecursive := ctx.Bool(recursiveFlag)
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
 	if ctx.NArg() == 1 {
 		// upload an empty folder
 		urlInfo = ctx.Args().Get(0)
@@ -959,7 +952,7 @@ func getObject(ctx *cli.Context) error {
 
 	spEndpoint := ctx.String(spEndpointFlag)
 
-	gnfdClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false, ForceToUseSpecifiedSpEndpointForDownloadOnly: spEndpoint})
+	gnfdClient, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false, ForceToUseSpecifiedSpEndpointForDownloadOnly: spEndpoint})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1067,7 +1060,7 @@ func cancelCreateObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	cli, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	cli, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1099,7 +1092,7 @@ func listObjects(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1183,7 +1176,7 @@ func updateObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1234,7 +1227,7 @@ func getUploadInfo(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1276,7 +1269,7 @@ func getObjAndBucketNames(urlInfo string) (string, string, error) {
 }
 
 func mirrorObject(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

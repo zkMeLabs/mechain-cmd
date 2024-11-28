@@ -75,7 +75,7 @@ func deleteBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -87,10 +87,7 @@ func deleteBucket(ctx *cli.Context) error {
 	if err != nil {
 		fmt.Printf("bucket %s not exist or already deleted\n", bucketName)
 	}
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
+
 	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		fmt.Println("delete bucket error:", err.Error())
@@ -136,17 +133,13 @@ func deleteObject(ctx *cli.Context) error {
 		}
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
 
 	c, cancelDelObject := context.WithCancel(globalContext)
 	defer cancelDelObject()
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
 	if supportRecursive {
 		if !deleteAll {
 			// if it is a folder and set the --recursive flag , list all the objects and delete them one by one
@@ -229,17 +222,13 @@ func deleteGroup(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
 
 	c, cancelDelGroup := context.WithCancel(globalContext)
 	defer cancelDelGroup()
-	privateKey, _, err := parseKeystore(ctx)
-	if err != nil {
-		return err
-	}
 	txnHash, err := client.DeleteGroup(c, groupName, sdktypes.DeleteGroupOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		return toCmdErr(err)

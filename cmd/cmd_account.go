@@ -126,7 +126,7 @@ $ mechain-cmd account default  0x75345BC9FfFAe09486dE7EC954bAfAEcE29b9b24`,
 }
 
 func getAccountBalance(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -432,7 +432,7 @@ func createAccount(ctx *cli.Context) error {
 }
 
 func Bridge(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -465,7 +465,7 @@ func Bridge(ctx *cli.Context) error {
 }
 
 func Transfer(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

@@ -35,7 +35,7 @@ func showVersion(ctx *cli.Context) error {
 }
 
 // NewClient returns a new mechain client
-func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
+func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, string, error) {
 	var (
 		account    *types.Account
 		err        error
@@ -46,19 +46,19 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 	if !opts.IsQueryCmd {
 		privateKey, _, err = parseKeystore(ctx)
 		if err != nil {
-			return nil, err
+			return nil, "", err
 		}
 
 		account, err = types.NewAccountFromPrivateKey("mechain-account", privateKey)
 		if err != nil {
 			fmt.Println("new account err", err.Error())
-			return nil, err
+			return nil, "", err
 		}
 	}
 
 	rpcAddr, chainId, host, evmRpcAddress, err := getConfig(ctx)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	if host != "" {
@@ -69,10 +69,10 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 
 	if err != nil {
 		fmt.Printf("failed to create client %s \n", err.Error())
-		return nil, err
+		return nil, "", err
 	}
 
-	return cli, nil
+	return cli, privateKey, nil
 }
 
 // ParseBucketAndObject parse the bucket-name and object-name from url
