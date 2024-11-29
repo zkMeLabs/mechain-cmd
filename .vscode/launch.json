@@ -136,7 +136,7 @@
         "${workspaceFolder}/deployment/localup/testkey/password.txt",
         "object",
         "get",
-        "mechain://mechain/random_file"
+        "mechain://mechain/go.mod"
       ]
     },
     {
@@ -156,7 +156,43 @@
       ]
     },
     {
-      "name": "ojbect set tag",
+      "name": "object update public",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "update",
+        "--visibility",
+        "public-read",
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "object update private",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "update",
+        "--visibility",
+        "private",
+        "mechain://mechain/go.mod"
+      ]
+    },
+    {
+      "name": "object set tag",
       "type": "go",
       "request": "launch",
       "mode": "auto",

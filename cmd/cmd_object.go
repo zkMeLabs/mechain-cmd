@@ -1176,7 +1176,7 @@ func updateObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1194,7 +1194,7 @@ func updateObject(ctx *cli.Context) error {
 		return typeErr
 	}
 
-	txnHash, err := client.UpdateObjectVisibility(c, bucketName, objectName, visibilityType, sdktypes.UpdateObjectOption{TxOpts: &TxnOptionWithSyncMode})
+	txnHash, err := client.UpdateObjectVisibility(c, bucketName, objectName, visibilityType, sdktypes.UpdateObjectOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
 	if err != nil {
 		fmt.Println("update object visibility error:", err.Error())
 		return nil
