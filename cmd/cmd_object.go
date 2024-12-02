@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/bnb-chain/greenfield-bundle-sdk/bundle"
+	"github.com/urfave/cli/v2"
 	"io"
 	"os"
 	"path/filepath"
@@ -14,12 +16,10 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
-	"github.com/urfave/cli/v2"
-
 	"github.com/evmos/evmos/v12/sdk/types"
 	gtypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	"github.com/google/uuid"
 	"github.com/zkMeLabs/mechain-go-sdk/client"
 	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
@@ -361,6 +361,7 @@ func putObject(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
 	if ctx.NArg() == 1 {
 		// upload an empty folder
 		urlInfo = ctx.Args().Get(0)
@@ -373,8 +374,12 @@ func putObject(ctx *cli.Context) error {
 		} else {
 			return toCmdErr(errors.New("no file path to upload, if you need create a folder, the folder name should be end with /"))
 		}
-
-		if err = uploadFile(bucketName, objectName, filePath, urlInfo, ctx, gnfdClient, isUploadSingleFolder, true, 0, privateKey); err != nil {
+		f, err := os.Open(objectName)
+		if err != nil {
+			return toCmdErr(err)
+		}
+		defer f.Close()
+		if err = uploadFile(bucketName, objectName, filePath, urlInfo, f, ctx, gnfdClient, isUploadSingleFolder, true, 0, privateKey); err != nil {
 			return toCmdErr(err)
 		}
 
@@ -402,23 +407,48 @@ func putObject(ctx *cli.Context) error {
 		// upload multiple files
 		if needUploadMultiFiles {
 			urlInfo = ctx.Args().Get(argNum - 1)
-			bucketName = ParseBucket(urlInfo)
-			if bucketName == "" {
-				return toCmdErr(errors.New("fail to parse bucket name"))
+			bucketName, objectName, err = getObjAndBucketNames(urlInfo)
+			if err != nil {
+				bucketName = ParseBucket(urlInfo)
+				if bucketName == "" {
+					return toCmdErr(errors.New("fail to parse bucket name"))
+				}
+				// if the object name has not been set, set the file name as object name
+				objectName = filepath.Base(filePathList[0])
 			}
 
-			for idx, fileName := range filePathList {
-				nameList := strings.Split(fileName, "/")
-				objectName = nameList[len(nameList)-1]
+			b, err := bundle.NewBundle()
+			if err != nil {
+				fmt.Printf("create bundle failed")
+				return toCmdErr(err)
+			}
+			defer b.Close()
+			for idx, path := range filePathList {
+				nameList := strings.Split(path, "/")
+				filename := nameList[len(nameList)-1]
 				objectSize, err = parseFileByArg(ctx, idx)
 				if err != nil {
 					return toCmdErr(err)
 				}
-
-				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
-					fmt.Println("upload object:", objectName, "err", err)
+				f, err := os.Open(path)
+				if err != nil {
+					fmt.Printf("open file %s failed", path)
+					continue
 				}
-				fmt.Println()
+				defer f.Close()
+				_, err = b.AppendObject(filename, f, nil)
+				if err != nil {
+					fmt.Printf("append object %s to bundle failed", filename)
+					continue
+				}
+			}
+			bundleObject, totalSize, err := b.FinalizeBundle()
+			if err != nil {
+				fmt.Printf("finalize bundle failed: %v", err)
+				return toCmdErr(fmt.Errorf("finalize bundle failed"))
+			}
+			if err = uploadFile(bucketName, objectName, "", urlInfo, bundleObject, ctx, gnfdClient, false, true, totalSize, privateKey); err != nil {
+				fmt.Println("upload object:", objectName, "err", err)
 			}
 		} else {
 			// upload single file
@@ -436,7 +466,13 @@ func putObject(ctx *cli.Context) error {
 				// if the object name has not been set, set the file name as object name
 				objectName = filepath.Base(filePathList[0])
 			}
-			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
+
+			f, err := os.Open(filePathList[0])
+			if err != nil {
+				return toCmdErr(err)
+			}
+			defer f.Close()
+			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, f, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
 				return toCmdErr(err)
 			}
 		}
@@ -669,10 +705,9 @@ func stateSync(ctx context.Context, homeDir string, state *TaskState) {
 	}
 }
 
-func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Context,
+func uploadFile(bucketName, objectName, filePath, urlInfo string, fileReader io.Reader, ctx *cli.Context,
 	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64, privKey string,
 ) error {
-	var file *os.File
 	contentType := ctx.String(contentTypeFlag)
 	secondarySPAccs := ctx.String(secondarySPFlag)
 	partSize := ctx.Uint64(partSizeFlag)
@@ -732,16 +767,12 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 				return toCmdErr(err)
 			}
 		} else {
-			// Open the referenced file.
-			file, err = os.Open(filePath)
-			if err != nil {
-				return err
-			}
-			defer file.Close()
-			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
+			fmt.Printf("object %s not exist , will create, otps: %v.\n", objectName, opts)
+			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, fileReader, opts, privKey)
 			if err != nil {
 				return toCmdErr(err)
 			}
+			fmt.Printf("wait txn %s status.\n", txnHash)
 			if err = waitTxnStatus(gnfdClient, c, txnHash, "createObject"); err != nil {
 				return toCmdErr(err)
 			}
@@ -767,20 +798,13 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	opt.DisableResumable = !resumableUpload
 	opt.PartSize = partSize
 
-	// Open the referenced file.
-	reader, err := os.Open(filePath)
-	if err != nil {
-		return err
-	}
-	defer reader.Close()
-
 	// if the file is more than 2G , it needs to force use resume uploading
 	if objectSize > maxPutWithoutResumeSize {
 		opt.DisableResumable = false
 	}
 
 	progressReader := &ProgressReader{
-		Reader:      reader,
+		Reader:      fileReader,
 		Total:       objectSize,
 		StartTime:   time.Now(),
 		LastPrinted: time.Now(),
@@ -793,7 +817,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 
 	if opt.DisableResumable {
 		if err = gnfdClient.PutObject(c, bucketName, objectName,
-			objectSize, progressReader, opt); err != nil {
+			objectSize, fileReader, opt); err != nil {
 			return toCmdErr(err)
 		}
 	} else {

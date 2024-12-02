@@ -7,6 +7,7 @@ toolchain go1.22.4
 require (
 	cosmossdk.io/math v1.0.1
 	github.com/BurntSushi/toml v1.3.2
+	github.com/bnb-chain/greenfield-bundle-sdk v1.1.0
 	github.com/cosmos/cosmos-sdk v0.47.10
 	github.com/cosmos/gogoproto v1.4.10
 	github.com/ethereum/go-ethereum v1.11.5
