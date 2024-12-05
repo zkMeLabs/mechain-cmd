@@ -14,7 +14,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.29.1
 	github.com/urfave/cli/v2 v2.25.7
-	github.com/zkMeLabs/mechain-go-sdk v0.0.0-20241203064542-01226d104535
+	github.com/zkMeLabs/mechain-go-sdk v0.0.0-20241205064520-2aac32d3a9a4
 	golang.org/x/term v0.22.0
 )
 
@@ -148,7 +148,7 @@ require (
 	github.com/wealdtech/go-eth2-util v1.6.3 // indirect
 	github.com/willf/bitset v1.1.11 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	github.com/zkMeLabs/mechain-common/go v0.0.0-20241203064024-dce305b68bc9 // indirect
+	github.com/zkMeLabs/mechain-common/go v0.0.0-20241203074119-fd3d09966a64 // indirect
 	github.com/zondax/hid v0.9.1 // indirect
 	github.com/zondax/ledger-go v0.14.1 // indirect
 	go.etcd.io/bbolt v1.3.9 // indirect
@@ -185,7 +185,7 @@ replace (
 	github.com/cosmos/iavl => github.com/zkMeLabs/mechain-iavl v0.20.1
 	github.com/cosmos/ibc-go/v7 => github.com/zkMeLabs/mechain-ibc-go/v7 v7.2.0-mocks-mechain.2
 	github.com/ethereum/go-ethereum => github.com/evmos/go-ethereum v1.10.26-evmos-rc2
-	github.com/evmos/evmos/v12 => github.com/zkMeLabs/mechain/v12 v12.0.0-20241203032720-32d0b9896270
+	github.com/evmos/evmos/v12 => github.com/zkMeLabs/mechain/v12 v12.0.0-20241203073109-477b21592402
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
