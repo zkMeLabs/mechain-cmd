@@ -252,7 +252,7 @@ $ mechain-cmd group setTag --tags='[{"key":"key1","value":"value1"},{"key":"key2
 
 // setTag Set tag for a given existing group
 func setTagForGroup(ctx *cli.Context) error {
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -284,7 +284,7 @@ func setTagForGroup(ctx *cli.Context) error {
 
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -304,7 +304,7 @@ func createGroup(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -325,7 +325,7 @@ func createGroup(ctx *cli.Context) error {
 	c, cancelCreateGroup := context.WithCancel(globalContext)
 	defer cancelCreateGroup()
 
-	txnHash, err := client.CreateGroup(c, groupName, opts, privateKey)
+	txnHash, err := client.CreateGroup(c, groupName, opts)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -354,7 +354,7 @@ func updateGroupMember(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -408,10 +408,10 @@ func updateGroupMember(ctx *cli.Context) error {
 			expireTimeList[i] = &t
 		}
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList}, privateKey)
+			sdktypes.UpdateGroupMemberOption{ExpirationTime: expireTimeList})
 	} else if expireTimestamp == 0 {
 		txnHash, err = client.UpdateGroupMember(c, groupName, groupOwner, addGroupMembers, removeGroupMembers,
-			sdktypes.UpdateGroupMemberOption{}, privateKey)
+			sdktypes.UpdateGroupMemberOption{})
 	}
 
 	if err != nil {
@@ -433,7 +433,7 @@ func renewGroupMember(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -500,7 +500,7 @@ func listGroupMember(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -540,7 +540,7 @@ func listGroupMember(ctx *cli.Context) error {
 
 // listGroup returns a list of groups owned by the specified user
 func listGroup(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -576,7 +576,7 @@ func listGroup(ctx *cli.Context) error {
 
 // listBelongGroup returns a list of all groups that the user has joined
 func listBelongGroup(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -676,7 +676,7 @@ func mirrorGroup(ctx *cli.Context) error {
 	c, cancelContext := context.WithCancel(globalContext)
 	defer cancelContext()
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

@@ -209,7 +209,7 @@ func setTagForBucket(ctx *cli.Context) error {
 	}
 
 	grn := gtypes.NewBucketGRN(bucketName)
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -229,7 +229,7 @@ func setTagForBucket(ctx *cli.Context) error {
 
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -249,7 +249,7 @@ func createBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -296,7 +296,7 @@ func createBucket(ctx *cli.Context) error {
 		}
 	}
 	opts.TxOpts = &types.TxOption{Mode: &SyncBroadcastMode}
-	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts, privateKey)
+	txnHash, err := client.CreateBucket(c, bucketName, primarySpAddrStr, opts)
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -313,7 +313,7 @@ func updateBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -348,7 +348,7 @@ func updateBucket(ctx *cli.Context) error {
 	}
 
 	opts.TxOpts = &TxnOptionWithSyncMode
-	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts, privateKey)
+	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts)
 	if err != nil {
 		fmt.Println("update bucket error:", err.Error())
 		return nil
@@ -377,7 +377,7 @@ func migrateBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -421,7 +421,7 @@ func migrateBucket(ctx *cli.Context) error {
 
 // listBuckets list the buckets of the specific owner
 func listBuckets(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -460,7 +460,7 @@ func listBuckets(ctx *cli.Context) error {
 }
 
 func mirrorBucket(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

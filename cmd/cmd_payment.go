@@ -53,7 +53,7 @@ func buyQuotaForBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -72,7 +72,7 @@ func buyQuotaForBucket(ctx *cli.Context) error {
 		return toCmdErr(errors.New("target quota not set"))
 	}
 
-	txnHash, err := client.BuyQuotaForBucket(c, bucketName, targetQuota, sdktypes.BuyQuotaOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
+	txnHash, err := client.BuyQuotaForBucket(c, bucketName, targetQuota, sdktypes.BuyQuotaOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
 		fmt.Println("buy quota error:", err.Error())
 		return nil
@@ -90,7 +90,7 @@ func getQuotaInfo(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

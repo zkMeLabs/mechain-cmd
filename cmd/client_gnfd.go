@@ -35,7 +35,7 @@ func showVersion(ctx *cli.Context) error {
 }
 
 // NewClient returns a new mechain client
-func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, string, error) {
+func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 	var (
 		account    *types.Account
 		err        error
@@ -46,33 +46,33 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, string, er
 	if !opts.IsQueryCmd {
 		privateKey, _, err = parseKeystore(ctx)
 		if err != nil {
-			return nil, "", err
+			return nil, err
 		}
 
 		account, err = types.NewAccountFromPrivateKey("mechain-account", privateKey)
 		if err != nil {
 			fmt.Println("new account err", err.Error())
-			return nil, "", err
+			return nil, err
 		}
 	}
 
 	rpcAddr, chainId, host, evmRpcAddress, err := getConfig(ctx)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
 
 	if host != "" {
-		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	} else {
-		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	}
 
 	if err != nil {
 		fmt.Printf("failed to create client %s \n", err.Error())
-		return nil, "", err
+		return nil, err
 	}
 
-	return cli, privateKey, nil
+	return cli, nil
 }
 
 // ParseBucketAndObject parse the bucket-name and object-name from url
