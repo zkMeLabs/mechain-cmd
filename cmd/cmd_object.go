@@ -299,7 +299,7 @@ func setTagForObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -321,7 +321,7 @@ func setTagForObject(ctx *cli.Context) error {
 
 	c, cancelSetTag := context.WithCancel(globalContext)
 	defer cancelSetTag()
-	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{}, privateKey)
+	txnHash, err := client.SetTag(c, grn.String(), *tags, sdktypes.SetTagsOptions{})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -348,7 +348,7 @@ func putObject(ctx *cli.Context) error {
 		urlInfo                          string
 	)
 
-	gnfdClient, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	gnfdClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return err
 	}
@@ -367,7 +367,7 @@ func putObject(ctx *cli.Context) error {
 			return toCmdErr(errors.New("no file path to upload, if you need create a folder, the folder name should be end with /"))
 		}
 
-		if err = uploadFile(bucketName, objectName, filePath, urlInfo, ctx, gnfdClient, isUploadSingleFolder, true, 0, privateKey); err != nil {
+		if err = uploadFile(bucketName, objectName, filePath, urlInfo, ctx, gnfdClient, isUploadSingleFolder, true, 0); err != nil {
 			return toCmdErr(err)
 		}
 
@@ -375,7 +375,7 @@ func putObject(ctx *cli.Context) error {
 		// upload files in folder in a recursive way
 		if supportRecursive {
 			urlInfo = ctx.Args().Get(1)
-			if err = uploadFolder(urlInfo, ctx, gnfdClient, privateKey); err != nil {
+			if err = uploadFolder(urlInfo, ctx, gnfdClient); err != nil {
 				return toCmdErr(err)
 			}
 			return nil
@@ -408,7 +408,7 @@ func putObject(ctx *cli.Context) error {
 					return toCmdErr(err)
 				}
 
-				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
+				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, gnfdClient, false, true, objectSize); err != nil {
 					fmt.Println("upload object:", objectName, "err", err)
 				}
 				fmt.Println()
@@ -429,7 +429,7 @@ func putObject(ctx *cli.Context) error {
 				// if the object name has not been set, set the file name as object name
 				objectName = filepath.Base(filePathList[0])
 			}
-			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, ctx, gnfdClient, false, true, objectSize, privateKey); err != nil {
+			if err = uploadFile(bucketName, objectName, filePathList[0], urlInfo, ctx, gnfdClient, false, true, objectSize); err != nil {
 				return toCmdErr(err)
 			}
 		}
@@ -440,7 +440,7 @@ func putObject(ctx *cli.Context) error {
 
 // uploadFolder upload folder and the files inside to bucket in a recursive way
 func uploadFolder(urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient, privateKey string,
+	gnfdClient client.IClient,
 ) error {
 	// upload folder with recursive flag
 	bucketName := ParseBucket(urlInfo)
@@ -570,10 +570,10 @@ func uploadFolder(urlInfo string, ctx *cli.Context,
 		return err
 	}
 
-	return uploadFolderByTask(ctx, homeDir, gnfdClient, taskState, privateKey)
+	return uploadFolderByTask(ctx, homeDir, gnfdClient, taskState)
 }
 
-func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.IClient, taskState *TaskState, privKey string) error {
+func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.IClient, taskState *TaskState) error {
 	signalCtx, cancel := context.WithCancel(ctx.Context)
 	go stateSync(signalCtx, homeDir, taskState)
 	sealSignal := make(chan int)
@@ -585,7 +585,7 @@ func uploadFolderByTask(ctx *cli.Context, homeDir string, gnfdClient client.ICli
 			continue
 		}
 
-		err := uploadFileByTask(object.BucketName, object.ObjectName, object.FilePath, taskState.Flag, gnfdClient, object.UploadSingleFolder, object.ObjectSize, privKey)
+		err := uploadFileByTask(object.BucketName, object.ObjectName, object.FilePath, taskState.Flag, gnfdClient, object.UploadSingleFolder, object.ObjectSize)
 		if err != nil {
 			taskState.UpdateObjectState(index, TaskObjectStatusFailed, err.Error())
 			fmt.Printf("\r%s", fmt.Sprintf("%s %s %s", TaskObjectStatusFailed, object.ObjectName, err.Error()))
@@ -663,7 +663,7 @@ func stateSync(ctx context.Context, homeDir string, state *TaskState) {
 }
 
 func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Context,
-	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64, privKey string,
+	gnfdClient client.IClient, uploadSingleFolder, printTxnHash bool, objectSize int64,
 ) error {
 	var file *os.File
 	contentType := ctx.String(contentTypeFlag)
@@ -720,7 +720,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	// if err==nil, object exist on chain, no need to createObject
 	if err != nil {
 		if uploadSingleFolder {
-			txnHash, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts, privKey)
+			txnHash, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -731,7 +731,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 				return err
 			}
 			defer file.Close()
-			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
+			txnHash, err = gnfdClient.CreateObject(c, bucketName, objectName, file, opts)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -831,7 +831,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 }
 
 func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag UploadFlag,
-	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64, privKey string,
+	gnfdClient client.IClient, uploadSingleFolder bool, objectSize int64,
 ) error {
 	var file *os.File
 
@@ -874,7 +874,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 	// if err==nil, object exist on chain, no need to createObject
 	if err != nil {
 		if uploadSingleFolder {
-			_, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts, privKey)
+			_, err = gnfdClient.CreateFolder(c, bucketName, objectName, opts)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -885,7 +885,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 				return err
 			}
 			defer file.Close()
-			txnHash, err := gnfdClient.CreateObject(c, bucketName, objectName, file, opts, privKey)
+			txnHash, err := gnfdClient.CreateObject(c, bucketName, objectName, file, opts)
 			if err != nil {
 				return toCmdErr(err)
 			}
@@ -952,7 +952,7 @@ func getObject(ctx *cli.Context) error {
 
 	spEndpoint := ctx.String(spEndpointFlag)
 
-	gnfdClient, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false, ForceToUseSpecifiedSpEndpointForDownloadOnly: spEndpoint})
+	gnfdClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false, ForceToUseSpecifiedSpEndpointForDownloadOnly: spEndpoint})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1060,7 +1060,7 @@ func cancelCreateObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	cli, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	cli, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1092,7 +1092,7 @@ func listObjects(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1176,7 +1176,7 @@ func updateObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, privateKey, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1194,7 +1194,7 @@ func updateObject(ctx *cli.Context) error {
 		return typeErr
 	}
 
-	txnHash, err := client.UpdateObjectVisibility(c, bucketName, objectName, visibilityType, sdktypes.UpdateObjectOption{TxOpts: &TxnOptionWithSyncMode}, privateKey)
+	txnHash, err := client.UpdateObjectVisibility(c, bucketName, objectName, visibilityType, sdktypes.UpdateObjectOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
 		fmt.Println("update object visibility error:", err.Error())
 		return nil
@@ -1227,7 +1227,7 @@ func getUploadInfo(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -1269,7 +1269,7 @@ func getObjAndBucketNames(urlInfo string) (string, string, error) {
 }
 
 func mirrorObject(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}

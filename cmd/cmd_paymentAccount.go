@@ -28,7 +28,7 @@ $ mechain-cmd payment-account create`,
 }
 
 func CreatePaymentAccount(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -81,7 +81,7 @@ $ mechain-cmd payment-account deposit --toAddress 0x.. --amount 12345`,
 }
 
 func Deposit(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -141,7 +141,7 @@ $ mechain-cmd payment-account withdraw --fromAddress 0x.. --amount 12345`,
 }
 
 func Withdraw(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
@@ -196,7 +196,7 @@ $ mechain-cmd payment-account ls `,
 }
 
 func listPaymentAccounts(ctx *cli.Context) error {
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
 	if err != nil {
 		return toCmdErr(err)
 	}

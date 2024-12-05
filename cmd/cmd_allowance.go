@@ -62,7 +62,7 @@ func grantAllowance(ctx *cli.Context) error {
 		expireTime = &temp
 	}
 
-	client, _, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)
 	}
