@@ -5,6 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "transfer",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bank",
+        "transfer",
+        "--toAddress",
+        "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "--amount",
+        "10000000000"
+      ]
+    },
+    {
       "name": "object fold create",
       "type": "go",
       "request": "launch",

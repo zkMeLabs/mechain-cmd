@@ -12,7 +12,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/evmos/evmos/v12/sdk/types"
-	gtypes "github.com/evmos/evmos/v12/types"
+	mechaindTypes "github.com/evmos/evmos/v12/types"
 	storagetypes "github.com/evmos/evmos/v12/x/storage/types"
 	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
@@ -208,7 +208,7 @@ func setTagForBucket(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	grn := gtypes.NewBucketGRN(bucketName)
+	grn := mechaindTypes.NewBucketGRN(bucketName)
 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
 	if err != nil {
 		return toCmdErr(err)

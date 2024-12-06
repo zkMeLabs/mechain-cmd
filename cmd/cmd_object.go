@@ -18,7 +18,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/evmos/evmos/v12/sdk/types"
-	gtypes "github.com/evmos/evmos/v12/types"
+	mechaindTypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
 	"github.com/zkMeLabs/mechain-go-sdk/client"
 	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
@@ -304,7 +304,7 @@ func setTagForObject(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	grn := gtypes.NewObjectGRN(bucketName, objectName)
+	grn := mechaindTypes.NewObjectGRN(bucketName, objectName)
 
 	tagsParam := ctx.String(tagFlag)
 	if tagsParam == "" {
