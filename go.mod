@@ -188,4 +188,5 @@ replace (
 	github.com/evmos/evmos/v12 => github.com/zkMeLabs/mechain/v12 v12.0.0-20241203073109-477b21592402
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+	github.com/zkMeLabs/mechain-go-sdk => ../mechain-go-sdk
 )
