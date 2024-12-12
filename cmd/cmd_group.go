@@ -14,7 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/evmos/evmos/v12/sdk/types"
-	gtypes "github.com/evmos/evmos/v12/types"
+	mechaindTypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
 	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
@@ -267,7 +267,7 @@ func setTagForGroup(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 
-	grn := gtypes.NewGroupGRN(acct.GetAddress(), groupName)
+	grn := mechaindTypes.NewGroupGRN(acct.GetAddress(), groupName)
 
 	tagsParam := ctx.String(tagFlag)
 	if tagsParam == "" {

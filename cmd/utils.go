@@ -29,6 +29,7 @@ import (
 	"github.com/evmos/evmos/v12/sdk/types"
 	permTypes "github.com/evmos/evmos/v12/x/permission/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	vgTypes "github.com/evmos/evmos/v12/x/virtualgroup/types"
 	sdkutils "github.com/zkMeLabs/mechain-go-sdk/pkg/utils"
 	sdktypes "github.com/zkMeLabs/mechain-go-sdk/types"
 )
@@ -253,7 +254,7 @@ func parseByJsonFormat(v proto.Message) {
 	fmt.Println(jsonData)
 }
 
-func parseBucketInfo(info *storageTypes.BucketInfo) {
+func parseBucketInfo(info *storageTypes.BucketInfo, gvgf *vgTypes.GlobalVirtualGroupFamily) {
 	fmt.Println("bucket_status:", info.BucketStatus.String())
 	infoStr := strings.Split(info.String(), " ")
 	for _, bucketInfo := range infoStr {
@@ -266,6 +267,9 @@ func parseBucketInfo(info *storageTypes.BucketInfo) {
 		}
 		fmt.Println(bucketInfo)
 	}
+	fmt.Println("virtual_group_family_id:", info.GlobalVirtualGroupFamilyId)
+	fmt.Println("primary SP ID:", gvgf.PrimarySpId)
+	fmt.Println("secondary SP IDs:", gvgf.GlobalVirtualGroupIds)
 }
 
 func getBucketNameByUrl(ctx *cli.Context) (string, error) {

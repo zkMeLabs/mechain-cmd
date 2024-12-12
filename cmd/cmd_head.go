@@ -163,11 +163,16 @@ func headBucket(ctx *cli.Context) error {
 		fmt.Println("no such bucket")
 		return nil
 	}
+	gvgf, err := client.QueryVirtualGroupFamily(ctx.Context, bucketInfo.GlobalVirtualGroupFamilyId)
+	if err != nil {
+		fmt.Println("no such virtual group family:", bucketInfo.GlobalVirtualGroupFamilyId)
+		return err
+	}
 
 	fmt.Println("latest bucket info:")
 	if format := ctx.String(formatFlag); format != "" {
 		if format == defaultFormat {
-			parseBucketInfo(bucketInfo)
+			parseBucketInfo(bucketInfo, gvgf)
 		} else if format == jsonFormat {
 			parseByJsonFormat(bucketInfo)
 		} else {

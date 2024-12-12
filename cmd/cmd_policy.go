@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/evmos/evmos/v12/sdk/types"
-	gnfdTypes "github.com/evmos/evmos/v12/types"
+	mechaindTypes "github.com/evmos/evmos/v12/types"
 	permTypes "github.com/evmos/evmos/v12/x/permission/types"
 	"github.com/urfave/cli/v2"
 	"github.com/zkMeLabs/mechain-go-sdk/client"
@@ -184,14 +184,14 @@ func putPolicy(ctx *cli.Context) error {
 		tm := time.Unix(int64(expireTime), 0)
 		if bucketNameOfBucketPolicy != "" && isObjectActionInBucketPolicy {
 			// putting bucket policy need to set the sub-resource as "grn:o:bucket-name/*"
-			statement = utils.NewStatement(actions, effect, []string{gnfdTypes.NewObjectGRN(bucketNameOfBucketPolicy, "*").String()}, sdktypes.NewStatementOptions{StatementExpireTime: &tm})
+			statement = utils.NewStatement(actions, effect, []string{mechaindTypes.NewObjectGRN(bucketNameOfBucketPolicy, "*").String()}, sdktypes.NewStatementOptions{StatementExpireTime: &tm})
 		} else {
 			statement = utils.NewStatement(actions, effect, nil, sdktypes.NewStatementOptions{StatementExpireTime: &tm})
 		}
 	} else {
 		if bucketNameOfBucketPolicy != "" && isObjectActionInBucketPolicy {
 			// putting bucket policy need to set the sub-resource as "grn:o:bucket-name/*"
-			statement = utils.NewStatement(actions, effect, []string{gnfdTypes.NewObjectGRN(bucketNameOfBucketPolicy, "*").String()}, sdktypes.NewStatementOptions{})
+			statement = utils.NewStatement(actions, effect, []string{mechaindTypes.NewObjectGRN(bucketNameOfBucketPolicy, "*").String()}, sdktypes.NewStatementOptions{})
 		} else {
 			statement = utils.NewStatement(actions, effect, nil, sdktypes.NewStatementOptions{})
 		}

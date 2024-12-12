@@ -14,7 +14,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.29.1
 	github.com/urfave/cli/v2 v2.25.7
-	github.com/zkMeLabs/mechain-go-sdk v0.2.0-alpha.1.0.20241205163502-e8c09387849c
+	github.com/zkMeLabs/mechain-go-sdk v0.2.0-alpha.1.0.20241212065041-42ab97c3c753
 	golang.org/x/term v0.22.0
 )
 
