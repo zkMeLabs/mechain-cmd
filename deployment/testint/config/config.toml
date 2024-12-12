@@ -1,3 +1,0 @@
-evmRpcAddr = "https://testnet-rpc.mechain.tech"
-rpcAddr = "https://testint-lcd.mechain.tech:443"
-chainId = "mechain_5151-1"
